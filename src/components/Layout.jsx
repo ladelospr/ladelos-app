@@ -1,0 +1,89 @@
+import { useState } from 'react'
+import { useAuth } from '../contexts/AuthContext'
+import { MODULO_ACCESO, ROLE_LABELS } from '../lib/constants'
+
+const NAV_ITEMS = [
+  { key: 'produccion',  label: 'Producción',   emoji: '📋' },
+  { key: 'carrito2',    label: 'Carrito 2',    emoji: '🛒' },
+  { key: 'cocina',      label: 'Cocina',        emoji: '🍳' },
+  { key: 'calendario',  label: 'Calendario',   emoji: '📅' },
+  { key: 'ingredientes',label: 'Ingredientes', emoji: '🧮' },
+  { key: 'mayoristas',  label: 'Mayoristas',   emoji: '📦' },
+  { key: 'facturas',    label: 'Facturas',      emoji: '🧾' },
+  { key: 'compras',     label: 'Compras',       emoji: '💰' },
+  { key: 'ventas',      label: 'Ventas',        emoji: '📊' },
+  { key: 'historial',   label: 'Historial',    emoji: '📁' },
+  { key: 'configuracion',label: 'Config',      emoji: '⚙️' },
+]
+
+export default function Layout({ children, activeTab, onTabChange }) {
+  const { profile, signOut } = useAuth()
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  const visibleItems = NAV_ITEMS.filter(item =>
+    MODULO_ACCESO[item.key]?.includes(profile?.rol)
+  )
+
+  return (
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f7fa' }}>
+      {/* Sidebar desktop */}
+      <aside style={{
+        width: 220, background: '#1B3BAA', color: 'white',
+        display: 'flex', flexDirection: 'column',
+        position: 'fixed', top: 0, left: 0, bottom: 0, zIndex: 100,
+      }} className="sidebar-desktop">
+        <div style={{ padding: '24px 20px 16px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+          <div style={{ fontSize: 32, fontWeight: 900, fontStyle: 'italic', color: '#a8c4e0' }}>L</div>
+          <div style={{ fontSize: 14, fontWeight: 700, letterSpacing: 2, marginTop: 2 }}>LADELOS</div>
+          <div style={{ fontSize: 10, opacity: 0.6, letterSpacing: 2 }}>PASTELILLOS</div>
+        </div>
+
+        <nav style={{ flex: 1, padding: '12px 0', overflowY: 'auto' }}>
+          {visibleItems.map(item => (
+            <button
+              key={item.key}
+              onClick={() => onTabChange(item.key)}
+              style={{
+                width: '100%', display: 'flex', alignItems: 'center', gap: 10,
+                padding: '10px 20px', border: 'none', cursor: 'pointer',
+                background: activeTab === item.key ? 'rgba(255,255,255,0.15)' : 'transparent',
+                color: activeTab === item.key ? 'white' : 'rgba(255,255,255,0.65)',
+                fontSize: 13, fontWeight: activeTab === item.key ? 600 : 400,
+                borderLeft: activeTab === item.key ? '3px solid #FF9900' : '3px solid transparent',
+                textAlign: 'left', transition: 'all 0.15s',
+              }}
+            >
+              <span>{item.emoji}</span>
+              <span>{item.label}</span>
+            </button>
+          ))}
+        </nav>
+
+        <div style={{ padding: '16px 20px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+          <div style={{ fontSize: 12, opacity: 0.6, marginBottom: 4 }}>{ROLE_LABELS[profile?.rol]}</div>
+          <div style={{ fontSize: 13, fontWeight: 500, marginBottom: 12, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{profile?.nombre}</div>
+          <button
+            onClick={signOut}
+            style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', background: 'transparent', border: 'none', cursor: 'pointer', padding: 0 }}
+          >
+            Cerrar sesión →
+          </button>
+        </div>
+      </aside>
+
+      {/* Main content */}
+      <main style={{ marginLeft: 220, flex: 1, padding: '24px 28px', minHeight: '100vh' }}>
+        <div style={{ maxWidth: 960, margin: '0 auto' }}>
+          {children}
+        </div>
+      </main>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .sidebar-desktop { display: none !important; }
+          main { margin-left: 0 !important; padding: 16px !important; }
+        }
+      `}</style>
+    </div>
+  )
+}
