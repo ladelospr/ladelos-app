@@ -29,10 +29,8 @@ export default function Login() {
         width: '100%', maxWidth: 400, boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
       }}>
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
-          <div style={{ fontSize: 56, fontWeight: 900, color: '#5b8db8', fontStyle: 'italic', lineHeight: 1 }}>L</div>
-          <div style={{ fontSize: 20, fontWeight: 700, color: '#1B3BAA', letterSpacing: 2, marginTop: 4 }}>LADELOS</div>
-          <div style={{ fontSize: 11, color: '#5b8db8', letterSpacing: 3 }}>PASTELILLOS</div>
-          <div style={{ fontSize: 13, color: '#666', marginTop: 12 }}>Sistema Operacional</div>
+          <img src="/ladelos-badge-8.png" alt="Ladelos" style={{ width: 180, objectFit: 'contain', marginBottom: 12 }} />
+<div style={{ fontSize: 13, color: '#666', marginTop: 4 }}>Sistema Operacional</div>
         </div>
 
         <form onSubmit={handleSubmit}>
