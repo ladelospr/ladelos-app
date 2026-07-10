@@ -9,12 +9,17 @@ export default function Login() {
   const [error, setError] = useState(null)
 
   async function handleSubmit(e) {
-    e.preventDefault()
-    setLoading(true)
-    setError(null)
-    const { error } = await signIn(email, password)
-    if (error) setError('Credenciales incorrectas. Intenta de nuevo.')
-    setLoading(false)
+  e.preventDefault()
+  setLoading(true)
+  setError(null)
+  
+  const { data, error } = await signIn(email, password)
+  
+  if (error) {
+    setError('Error: ' + error.message + ' | Status: ' + error.status)
+  }
+  setLoading(false)
+}
   }
 
   return (
