@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
+import { MODULO_ACCESO } from '../lib/constants'
 
 const AuthContext = createContext({})
 
@@ -35,18 +36,21 @@ export function AuthProvider({ children }) {
   }
 
   async function signIn(email, password) {
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
-    return { error }
+    const { data, error } = await supabase.auth.signInWithPassword({ 
+      email: email.trim(), 
+      password 
+    })
+    return { data, error }
   }
 
   async function signOut() {
     await supabase.auth.signOut()
+    setUser(null)
     setProfile(null)
   }
 
   function puedeAcceder(modulo) {
     if (!profile) return false
-    const { MODULO_ACCESO } = require('../lib/constants')
     return MODULO_ACCESO[modulo]?.includes(profile.rol) ?? false
   }
 
