@@ -9,17 +9,14 @@ export default function Login() {
   const [error, setError] = useState(null)
 
   async function handleSubmit(e) {
-  e.preventDefault()
-  setLoading(true)
-  setError(null)
-  
-  const { data, error } = await signIn(email, password)
-  
-  if (error) {
-    setError('Error: ' + error.message + ' | Status: ' + error.status)
-  }
-  setLoading(false)
-}
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
+    const { data, error } = await signIn(email, password)
+    if (error) {
+      setError('Error: ' + error.message + ' | Status: ' + error.status)
+    }
+    setLoading(false)
   }
 
   return (
@@ -47,7 +44,6 @@ export default function Login() {
               style={{
                 width: '100%', boxSizing: 'border-box', padding: '10px 14px',
                 borderRadius: 8, border: '1px solid #e0e0e0', fontSize: 14,
-                outline: 'none',
               }}
             />
           </div>
@@ -59,7 +55,6 @@ export default function Login() {
               style={{
                 width: '100%', boxSizing: 'border-box', padding: '10px 14px',
                 borderRadius: 8, border: '1px solid #e0e0e0', fontSize: 14,
-                outline: 'none',
               }}
             />
           </div>
