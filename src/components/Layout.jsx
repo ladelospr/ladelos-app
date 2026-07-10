@@ -3,17 +3,17 @@ import { useAuth } from '../contexts/AuthContext'
 import { MODULO_ACCESO, ROLE_LABELS } from '../lib/constants'
 
 const NAV_ITEMS = [
-  { key: 'produccion',  label: 'Producción',   emoji: '📋' },
-  { key: 'carrito2',    label: 'Carrito 2',    emoji: '🛒' },
-  { key: 'cocina',      label: 'Cocina',        emoji: '🍳' },
-  { key: 'calendario',  label: 'Calendario',   emoji: '📅' },
-  { key: 'ingredientes',label: 'Ingredientes', emoji: '🧮' },
-  { key: 'mayoristas',  label: 'Mayoristas',   emoji: '📦' },
-  { key: 'facturas',    label: 'Facturas',      emoji: '🧾' },
-  { key: 'compras',     label: 'Compras',       emoji: '💰' },
-  { key: 'ventas',      label: 'Ventas',        emoji: '📊' },
-  { key: 'historial',   label: 'Historial',    emoji: '📁' },
-  { key: 'configuracion',label: 'Config',      emoji: '⚙️' },
+  { key: 'produccion',   label: 'Producción',   emoji: '📋' },
+  { key: 'carrito2',     label: 'Carrito 2',    emoji: '🛒' },
+  { key: 'cocina',       label: 'Cocina',        emoji: '🍳' },
+  { key: 'calendario',   label: 'Calendario',   emoji: '📅' },
+  { key: 'ingredientes', label: 'Ingredientes', emoji: '🧮' },
+  { key: 'mayoristas',   label: 'Mayoristas',   emoji: '📦' },
+  { key: 'facturas',     label: 'Facturas',      emoji: '🧾' },
+  { key: 'compras',      label: 'Compras',       emoji: '💰' },
+  { key: 'ventas',       label: 'Ventas',        emoji: '📊' },
+  { key: 'historial',    label: 'Historial',    emoji: '📁' },
+  { key: 'configuracion',label: 'Config',       emoji: '⚙️' },
 ]
 
 export default function Layout({ children, activeTab, onTabChange }) {
@@ -26,6 +26,7 @@ export default function Layout({ children, activeTab, onTabChange }) {
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f7fa' }}>
+
       {/* Sidebar desktop */}
       <aside style={{
         width: 220, background: '#1B3BAA', color: 'white',
@@ -50,7 +51,7 @@ export default function Layout({ children, activeTab, onTabChange }) {
                 color: activeTab === item.key ? 'white' : 'rgba(255,255,255,0.65)',
                 fontSize: 13, fontWeight: activeTab === item.key ? 600 : 400,
                 borderLeft: activeTab === item.key ? '3px solid #FF9900' : '3px solid transparent',
-                textAlign: 'left', transition: 'all 0.15s',
+                textAlign: 'left',
               }}
             >
               <span>{item.emoji}</span>
@@ -59,20 +60,69 @@ export default function Layout({ children, activeTab, onTabChange }) {
           ))}
         </nav>
 
-        <div style={{ padding: '16px 20px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-          <div style={{ fontSize: 12, opacity: 0.6, marginBottom: 4 }}>{ROLE_LABELS[profile?.rol]}</div>
-          <div style={{ fontSize: 13, fontWeight: 500, marginBottom: 12, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{profile?.nombre}</div>
-          <button
-            onClick={signOut}
-            style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', background: 'transparent', border: 'none', cursor: 'pointer', padding: 0 }}
-          >
+        <div style={{ padding: '16px 20px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+          <div style={{ fontSize: 12, opacity: 0.6 }}>{ROLE_LABELS[profile?.rol]}</div>
+          <div style={{ fontSize: 13, fontWeight: 500, marginBottom: 8 }}>{profile?.nombre}</div>
+          <button onClick={signOut} style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', background: 'transparent', border: 'none', cursor: 'pointer', padding: 0 }}>
             Cerrar sesión →
           </button>
         </div>
       </aside>
 
+      {/* Header móvil */}
+      <div className="mobile-header" style={{
+        display: 'none', position: 'fixed', top: 0, left: 0, right: 0, zIndex: 200,
+        background: '#1B3BAA', color: 'white', padding: '12px 16px',
+        alignItems: 'center', justifyContent: 'space-between',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <span style={{ fontSize: 24, fontWeight: 900, fontStyle: 'italic', color: '#a8c4e0' }}>L</span>
+          <span style={{ fontSize: 13, fontWeight: 700, letterSpacing: 1 }}>LADELOS</span>
+        </div>
+        <button
+          onClick={() => setMenuOpen(!menuOpen)}
+          style={{ background: 'transparent', border: 'none', color: 'white', fontSize: 24, cursor: 'pointer', padding: 4 }}
+        >
+          {menuOpen ? '✕' : '☰'}
+        </button>
+      </div>
+
+      {/* Menú móvil desplegable */}
+      {menuOpen && (
+        <div className="mobile-menu" style={{
+          display: 'none', position: 'fixed', top: 52, left: 0, right: 0, bottom: 0,
+          background: '#1B3BAA', zIndex: 190, overflowY: 'auto', paddingTop: 8,
+        }}>
+          {visibleItems.map(item => (
+            <button
+              key={item.key}
+              onClick={() => { onTabChange(item.key); setMenuOpen(false) }}
+              style={{
+                width: '100%', display: 'flex', alignItems: 'center', gap: 12,
+                padding: '14px 20px', border: 'none', cursor: 'pointer',
+                background: activeTab === item.key ? 'rgba(255,255,255,0.15)' : 'transparent',
+                color: activeTab === item.key ? 'white' : 'rgba(255,255,255,0.7)',
+                fontSize: 15, fontWeight: activeTab === item.key ? 600 : 400,
+                borderLeft: activeTab === item.key ? '3px solid #FF9900' : '3px solid transparent',
+                textAlign: 'left',
+              }}
+            >
+              <span style={{ fontSize: 20 }}>{item.emoji}</span>
+              <span>{item.label}</span>
+            </button>
+          ))}
+          <div style={{ padding: '20px', borderTop: '1px solid rgba(255,255,255,0.1)', marginTop: 8 }}>
+            <div style={{ fontSize: 12, opacity: 0.6, marginBottom: 4 }}>{ROLE_LABELS[profile?.rol]}</div>
+            <div style={{ fontSize: 14, fontWeight: 500, marginBottom: 12 }}>{profile?.nombre}</div>
+            <button onClick={() => { signOut(); setMenuOpen(false) }} style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', background: 'transparent', border: 'none', cursor: 'pointer', padding: 0 }}>
+              Cerrar sesión →
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Main content */}
-      <main style={{ marginLeft: 220, flex: 1, padding: '24px 28px', minHeight: '100vh' }}>
+      <main style={{ marginLeft: 220, flex: 1, padding: '24px 28px', minHeight: '100vh' }} className="main-content">
         <div style={{ maxWidth: 960, margin: '0 auto' }}>
           {children}
         </div>
@@ -81,7 +131,9 @@ export default function Layout({ children, activeTab, onTabChange }) {
       <style>{`
         @media (max-width: 768px) {
           .sidebar-desktop { display: none !important; }
-          main { margin-left: 0 !important; padding: 16px !important; }
+          .mobile-header { display: flex !important; }
+          .mobile-menu { display: block !important; }
+          .main-content { margin-left: 0 !important; padding: 72px 16px 24px !important; }
         }
       `}</style>
     </div>
