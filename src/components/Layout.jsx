@@ -34,9 +34,7 @@ export default function Layout({ children, activeTab, onTabChange }) {
         position: 'fixed', top: 0, left: 0, bottom: 0, zIndex: 100,
       }} className="sidebar-desktop">
         <div style={{ padding: '24px 20px 16px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-          <div style={{ fontSize: 32, fontWeight: 900, fontStyle: 'italic', color: '#a8c4e0' }}>L</div>
-          <div style={{ fontSize: 14, fontWeight: 700, letterSpacing: 2, marginTop: 2 }}>LADELOS</div>
-          <div style={{ fontSize: 10, opacity: 0.6, letterSpacing: 2 }}>PASTELILLOS</div>
+          <img src="/ladelos-badge-8.png" alt="Ladelos" style={{ width: 140, objectFit: 'contain', marginBottom: 8 }} />
         </div>
 
         <nav style={{ flex: 1, padding: '12px 0', overflowY: 'auto' }}>
@@ -76,8 +74,7 @@ export default function Layout({ children, activeTab, onTabChange }) {
         alignItems: 'center', justifyContent: 'space-between',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <span style={{ fontSize: 24, fontWeight: 900, fontStyle: 'italic', color: '#a8c4e0' }}>L</span>
-          <span style={{ fontSize: 13, fontWeight: 700, letterSpacing: 1 }}>LADELOS</span>
+          <img src="/ladelos-badge-8.png" alt="Ladelos" style={{ height: 36, objectFit: 'contain' }} />
         </div>
         <button
           onClick={() => setMenuOpen(!menuOpen)}
