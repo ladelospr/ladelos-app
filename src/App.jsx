@@ -28,6 +28,7 @@ const PAGE_MAP = {
   facturas: Facturas,
   ventas: Ventas,
   compras: Compras,
+  clover: Clover,
   historial: Historial,
   configuracion: Configuracion,
 }
