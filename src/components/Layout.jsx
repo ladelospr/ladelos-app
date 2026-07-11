@@ -12,9 +12,9 @@ const NAV_ITEMS = [
   { key: 'facturas',     label: 'Facturas',      emoji: '🧾' },
   { key: 'compras',      label: 'Compras',       emoji: '💰' },
   { key: 'ventas',       label: 'Ventas',        emoji: '📊' },
+  { key: 'clover', label: 'Clover Sync', emoji: '🔄' },
   { key: 'historial',    label: 'Historial',    emoji: '📁' },
   { key: 'configuracion',label: 'Config',       emoji: '⚙️' },
-  { key: 'clover', label: 'Clover Sync', emoji: '🔄' },
 ]
 
 export default function Layout({ children, activeTab, onTabChange }) {
