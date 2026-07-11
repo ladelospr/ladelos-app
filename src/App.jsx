@@ -68,14 +68,20 @@ export default function App() {
   return (
     <Layout activeTab={activeTab} onTabChange={setActiveTab}>
       <Suspense fallback={
-        <div style={{ padding: 40, textAlign: 'center', color: '#999' }}>Cargando módulo...</div>
-      }>
-        {PageComponent ? <PageComponent /> : (
-          <div style={{ padding: 40, textAlign: 'center', color: '#999' }}>
-            Selecciona un módulo del menú.
-          </div>
-        )}
-      </Suspense>
+  <div style={{ padding: 40, textAlign: 'center', color: '#999' }}>Cargando módulo...</div>
+}>
+  {PageComponent ? (
+    <PageComponent />
+  ) : activeTab ? (
+    <div style={{ padding: 40, textAlign: 'center', color: '#dc2626' }}>
+      Módulo "{activeTab}" no encontrado o sin acceso.
+    </div>
+  ) : (
+    <div style={{ padding: 40, textAlign: 'center', color: '#999' }}>
+      Selecciona un módulo del menú.
+    </div>
+  )}
+</Suspense>
     </Layout>
   )
 }
