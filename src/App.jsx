@@ -62,8 +62,8 @@ export default function App() {
 
   if (!user) return <Login />
 
-  const canAccess = activeTab && MODULO_ACCESO[activeTab]?.includes(profile?.rol)
-  const PageComponent = canAccess ? PAGE_MAP[activeTab] : null
+  const canAccess = activeTab && (MODULO_ACCESO[activeTab]?.includes(profile?.rol) ?? true)
+  const PageComponent = activeTab ? (PAGE_MAP[activeTab] || null) : null
 
   return (
     <Layout activeTab={activeTab} onTabChange={setActiveTab}>
