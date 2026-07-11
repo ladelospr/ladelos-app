@@ -14,6 +14,7 @@ const NAV_ITEMS = [
   { key: 'ventas',       label: 'Ventas',        emoji: '📊' },
   { key: 'historial',    label: 'Historial',    emoji: '📁' },
   { key: 'configuracion',label: 'Config',       emoji: '⚙️' },
+  { key: 'clover', label: 'Clover Sync', emoji: '🔄' },
 ]
 
 export default function Layout({ children, activeTab, onTabChange }) {
