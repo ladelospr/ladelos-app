@@ -27,6 +27,8 @@ export const MODULO_ACCESO = {
   ingredientes: ['admin', 'supervisor', 'produccion'],
   facturas:     ['admin', 'supervisor'],
   compras:      ['admin', 'supervisor'],
+  inventario:   ['admin', 'supervisor'],
+  recibos:      ['admin', 'supervisor'],
   clover:       ['admin', 'supervisor'],
   historial:    ['admin', 'supervisor'],
   configuracion:['admin'],
