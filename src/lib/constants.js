@@ -29,10 +29,53 @@ export const MODULO_ACCESO = {
   compras:      ['admin', 'supervisor'],
   inventario:   ['admin', 'supervisor'],
   recibos:      ['admin', 'supervisor'],
+  lista_compra: ['admin', 'supervisor'],
+  gastos_fijos: ['admin', 'supervisor'],
+  horarios:     ['admin', 'supervisor', 'cocina', 'produccion'],
   clover:       ['admin', 'supervisor'],
   historial:    ['admin', 'supervisor'],
   configuracion:['admin'],
 }
+
+// Tiendas fisicas. Se usa como etiqueta de texto en las tablas inv_* y
+// en los modulos de gastos y horarios.
+export const TIENDAS = ['Bayamón', 'Cataño']
+
+// Tipos de gasto fijo recurrente (columna tipo de inv_gastos_fijos)
+export const TIPOS_GASTO = [
+  { valor: 'agua',       label: 'Agua' },
+  { valor: 'luz',        label: 'Luz' },
+  { valor: 'gas',        label: 'Gas' },
+  { valor: 'seguro',     label: 'Seguro' },
+  { valor: 'alquiler',   label: 'Alquiler' },
+  { valor: 'reparacion', label: 'Reparación' },
+  { valor: 'internet',   label: 'Internet / Teléfono' },
+  { valor: 'otro',       label: 'Otro' },
+]
+
+export const TIPO_GASTO_LABEL = Object.fromEntries(
+  TIPOS_GASTO.map(t => [t.valor, t.label])
+)
+
+// Bucket de Supabase Storage donde viven las fotos de recibos de gastos fijos
+export const BUCKET_GASTOS = 'gastos_fijos'
+
+// Dias de la semana para los horarios. dia_semana 0 = lunes.
+export const DIAS_SEMANA = [
+  { valor: 0, label: 'Lunes',     corto: 'Lun' },
+  { valor: 1, label: 'Martes',    corto: 'Mar' },
+  { valor: 2, label: 'Miércoles', corto: 'Mié' },
+  { valor: 3, label: 'Jueves',    corto: 'Jue' },
+  { valor: 4, label: 'Viernes',   corto: 'Vie' },
+  { valor: 5, label: 'Sábado',    corto: 'Sáb' },
+  { valor: 6, label: 'Domingo',   corto: 'Dom' },
+]
+
+// Los dos turnos del dia. Coinciden con la columna bloque (1 o 2).
+export const BLOQUES = [
+  { valor: 1, label: '7AM – 2PM', corto: 'AM' },
+  { valor: 2, label: '2PM – 7PM', corto: 'PM' },
+]
 
 export const S = 0.75 // oz por slice de queso
 

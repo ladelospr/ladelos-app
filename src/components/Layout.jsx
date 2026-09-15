@@ -14,7 +14,10 @@ const NAV_ITEMS = [
   { key: 'ventas',       label: 'Ventas',        emoji: '📊' },
   { key: 'clover',       label: 'Clover Sync',   emoji: '🔄' },
   { key: 'inventario',   label: 'Inventario',   emoji: '📦' },
-  { key: 'recibos',   label: 'Recibos',   emoji: '🧾' },
+  { key: 'recibos',      label: 'Recibos',      emoji: '🧾' },
+  { key: 'lista_compra', label: 'Lista Compra', emoji: '🛍️' },
+  { key: 'gastos_fijos', label: 'Gastos Fijos', emoji: '💡' },
+  { key: 'horarios',     label: 'Horarios',     emoji: '🗓️' },
   { key: 'historial',    label: 'Historial',    emoji: '📁' },
   { key: 'configuracion',label: 'Config',       emoji: '⚙️' },
 ]

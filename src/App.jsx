@@ -19,6 +19,9 @@ const Compras       = lazy(() => import('./pages/Compras'))
 const Clover = lazy(() => import('./pages/Clover'))
 const Inventario = lazy(() => import('./pages/Inventario'))
 const Recibos = lazy(() => import('./pages/Recibos'))
+const ListaCompra = lazy(() => import('./pages/ListaCompra'))
+const GastosFijos = lazy(() => import('./pages/GastosFijos'))
+const Horarios = lazy(() => import('./pages/Horarios'))
 
 const PAGE_MAP = {
   produccion: Produccion,
@@ -33,6 +36,9 @@ const PAGE_MAP = {
   clover: Clover,
   inventario: Inventario,
   recibos: Recibos,
+  lista_compra: ListaCompra,
+  gastos_fijos: GastosFijos,
+  horarios: Horarios,
   historial: Historial,
   configuracion: Configuracion,
 }
