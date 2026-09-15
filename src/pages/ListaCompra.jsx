@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { supabase } from "../lib/supabase";
 import { TIENDAS } from "../lib/constants";
+import { descargarCSV } from "../lib/csv";
 
 // La vista inv_lista_compra vive en Supabase y ya hace el calculo de que
 // hay que pedir. Como los nombres de sus columnas han cambiado un par de
@@ -47,24 +48,6 @@ const ORIGEN_LABEL = {
 };
 
 const num = (v) => (v === null || v === undefined || v === "" ? "—" : String(v));
-
-function descargarCSV(nombre, filas) {
-  const escapa = (v) => `"${String(v ?? "").replace(/"/g, '""')}"`;
-  const cabecera = ["Área", "Producto", "En mano", "Red zone", "Par", "Pedir", "Unidad", "Origen"];
-  const cuerpo = filas.map((f) =>
-    [f.area, f.producto, f.en_mano, f.red_zone, f.par, f.pedir, f.unidad, ORIGEN_LABEL[f.origen] ?? f.origen]
-      .map(escapa)
-      .join(","),
-  );
-  // El BOM es lo que hace que Excel abra el archivo con los acentos bien.
-  const csv = "﻿" + [cabecera.map(escapa).join(","), ...cuerpo].join("\r\n");
-  const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8;" }));
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = nombre;
-  a.click();
-  URL.revokeObjectURL(url);
-}
 
 async function copiarAlPortapapeles(texto) {
   try {
@@ -176,7 +159,14 @@ export default function ListaCompra() {
   function exportar() {
     if (!visibles.length) return setMensaje({ tipo: "error", texto: "No hay nada que exportar." });
     const fecha = new Date().toISOString().split("T")[0];
-    descargarCSV(`lista-compra-${tienda.toLowerCase()}-${fecha}.csv`, visibles);
+    descargarCSV(
+      `lista-compra-${tienda.toLowerCase()}-${fecha}.csv`,
+      ["Área", "Producto", "En mano", "Red zone", "Par", "Pedir", "Unidad", "Origen"],
+      visibles.map((f) => [
+        f.area, f.producto, f.en_mano, f.red_zone, f.par, f.pedir, f.unidad,
+        ORIGEN_LABEL[f.origen] ?? f.origen,
+      ]),
+    );
   }
 
   async function marcarEnviado() {

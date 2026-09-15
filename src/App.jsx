@@ -22,6 +22,8 @@ const Recibos = lazy(() => import('./pages/Recibos'))
 const ListaCompra = lazy(() => import('./pages/ListaCompra'))
 const GastosFijos = lazy(() => import('./pages/GastosFijos'))
 const Horarios = lazy(() => import('./pages/Horarios'))
+const Ponches = lazy(() => import('./pages/Ponches'))
+const Nomina = lazy(() => import('./pages/Nomina'))
 
 const PAGE_MAP = {
   produccion: Produccion,
@@ -39,6 +41,8 @@ const PAGE_MAP = {
   lista_compra: ListaCompra,
   gastos_fijos: GastosFijos,
   horarios: Horarios,
+  ponches: Ponches,
+  nomina: Nomina,
   historial: Historial,
   configuracion: Configuracion,
 }

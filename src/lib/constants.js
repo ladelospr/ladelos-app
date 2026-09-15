@@ -32,6 +32,8 @@ export const MODULO_ACCESO = {
   lista_compra: ['admin', 'supervisor'],
   gastos_fijos: ['admin', 'supervisor'],
   horarios:     ['admin', 'supervisor', 'cocina', 'produccion'],
+  ponches:      ['admin', 'supervisor', 'cocina', 'produccion'],
+  nomina:       ['admin'],
   clover:       ['admin', 'supervisor'],
   historial:    ['admin', 'supervisor'],
   configuracion:['admin'],

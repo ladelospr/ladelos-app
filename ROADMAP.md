@@ -5,13 +5,16 @@ para que funcione.
 
 ## Antes de nada: correr el SQL
 
+Pegar en el SQL Editor de Supabase **en este orden**:
+
 ```
-supabase-roadmap.sql   → pegar en el SQL Editor de Supabase y ejecutar
+1. supabase-roadmap.sql   → tablas de las fases 2-4 + funciones de RLS
+2. supabase-rls-fix.sql   → quita la recursión de las tablas viejas
+3. supabase-nomina.sql    → ponches, nómina y tarifas (fase 5)
 ```
 
-Crea `inv_ordenes_compra`, `empleados`, `disponibilidades`,
-`horarios_asignados`, `horarios_historial`, el bucket de storage
-`gastos_fijos`, y arregla la recursión de RLS en `profiles` (ver más abajo).
+Cada uno comprueba al empezar que el anterior ya corrió, así que si te saltas
+uno te lo dice en vez de fallar a medias. Los tres son idempotentes.
 
 Y desplegar el Edge Function:
 
@@ -112,12 +115,65 @@ ya están creadas y listas.
 necesita una librería (`jspdf` + `jspdf-autotable`, o imprimir una vista con
 CSS `@media print`).
 
-## Fase 5 — Nómina y ponches ⏸️ bloqueada a propósito
+## Fase 5 — Nómina y ponches ✅
 
-No se implementó, siguiendo el constraint del roadmap: la nómina es dato
-sensible y espera a que el RLS esté arreglado.
+El constraint era que la nómina esperara a que el RLS estuviera arreglado.
+`supabase-rls-fix.sql` completa ese arreglo (ver la sección de RLS abajo), y
+las tablas de nómina nacen con políticas correctas desde el principio.
 
-`supabase-roadmap.sql` da el primer paso de ese arreglo — ver abajo.
+**Dónde vive el cálculo.** En Postgres, no en el navegador. `generar_nomina()`
+es `SECURITY DEFINER` y comprueba el rol antes de escribir nada, así que no
+depende de que la interfaz esconda un botón.
+
+**`ponches`** — un ponche abierto es el que tiene `hora_salida` NULL.
+- Índice parcial único: **un empleado no puede tener dos ponches abiertos**,
+  ni siquiera dándole a "Entrada" desde dos pantallas a la vez.
+- `CHECK` de que la salida sea posterior a la entrada.
+- RLS: gerencia ve todos, un empleado solo los suyos. Borrar es admin-only,
+  porque borrar un ponche es corregir las horas de alguien.
+
+**`empleados_tarifas`** — la tarifa por hora va en su propia tabla, no como
+columna de `empleados`. El RLS de Postgres es **por fila, no por columna**, y
+`empleados` la tiene que poder leer cualquiera autenticado (Horarios necesita
+los nombres): una columna `tarifa_hora` ahí habría dejado los sueldos a la
+vista de todo el mundo. Separada, queda detrás de su propia política
+admin-only. Además guarda historial (`vigente_desde`), así que una subida de
+sueldo no reescribe las nóminas ya generadas.
+
+**`nomina`** — `neto` es una columna generada (`bruto - descuentos`), así que
+no puede descuadrarse. Un trigger impide editar una nómina cerrada, pero sí
+deja reabrirla.
+
+**Módulo `Ponches.jsx`** — botón grande de Entrada/Salida para la tablet de la
+tienda, cronómetro del turno abierto, últimos 10 ponches, y vista de gerencia
+con filtros por fecha y tienda.
+
+**Módulo `Nomina.jsx`** — solo admin. Selector de mes, "Generar nómina" (llama
+a la función de Postgres), tabla con la desviación entre horas asignadas y
+ponchadas, descuentos editables, cerrar/reabrir, exportar CSV e historial de
+períodos.
+
+### Lo que la app NO calcula, a propósito
+
+**Las retenciones de Puerto Rico** (seguro social, Medicare, retención de
+Hacienda, CRIM) no se calculan. Dependen del W-4 de cada empleado y de las
+tablas vigentes del Departamento de Hacienda; meterlas a ojo sería inventar
+números sobre el sueldo de alguien. La columna `descuentos` se escribe a mano
+o se saca del proveedor de payroll, y `neto` se deriva de ahí.
+
+### Aproximación conocida
+
+`horas_asignadas()` cuenta cada semana entera en el mes de su lunes, así que
+la semana del 28 de septiembre al 4 de octubre cae toda en septiembre. Es una
+cifra de referencia para comparar contra lo ponchado; **lo que se paga sale de
+`horas_trabajadas`**, que sí va por fecha real de cada ponche.
+
+### Zona horaria
+
+`Ponches.jsx` manda la fecha local, no `toISOString()`. Puerto Rico va en
+UTC-4: un ponche a las 9 de la noche se habría guardado con la fecha del día
+siguiente, y como `horas_trabajadas()` filtra por esa columna, las horas
+habrían caído en el mes equivocado en el corte de fin de mes.
 
 ## Fase 6 — Dashboards ⏳
 
@@ -156,22 +212,36 @@ schema.
 `profiles` sin volver a disparar RLS, y reescribe la política de `profiles`
 para usarlas. Las tablas nuevas ya las usan.
 
-Las tablas viejas (`dias_ventas`, `tandas_cocina`, `clientes_mayoristas`,
-`ordenes_mayoristas`, `facturas`, `gastos`) **siguen con el patrón
-recursivo**. No se tocaron para no cambiar módulos que ya están corriendo en
-producción, pero la migración es mecánica: sustituir
+`supabase-rls-fix.sql` termina el trabajo en las tablas viejas
+(`dias_ventas`, `tandas_cocina`, `clientes_mayoristas`, `ordenes_mayoristas`,
+`facturas`, `gastos`), sustituyendo el patrón recursivo por `es_gerencia()` /
+`es_admin()` sin cambiar quién puede ver qué. `conteos_carrito2` no hacía
+falta tocarla: sus políticas usan `auth.role()`, que no es recursivo.
+
+Para comprobar que no queda ninguna, esta consulta debe devolver 0 filas:
 
 ```sql
-EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND rol IN ('admin','supervisor'))
+SELECT schemaname, tablename, policyname
+FROM pg_policies
+WHERE schemaname = 'public'
+  AND tablename <> 'profiles'
+  AND (qual LIKE '%FROM profiles%' OR with_check LIKE '%FROM profiles%');
 ```
 
-por
+### Verificado contra un Postgres real
 
-```sql
-public.es_gerencia()
-```
+Los cinco scripts se corrieron sobre PostgreSQL 16 con un shim que emula
+`auth.uid()`, `auth.role()` y el schema `storage`. Se comprobó que:
 
-Ese es el trabajo que desbloquea la Fase 5.
+- Con la política original, `SELECT FROM profiles` como admin devuelve
+  exactamente `ERROR: infinite recursion detected in policy for relation
+  "profiles"` (42P17); con el arreglo, devuelve las filas.
+- Un supervisor ve 0 filas de `nomina` y todos los ponches; un empleado con rol
+  `cocina` ve solo su propia nómina y solo sus ponches.
+- `generar_nomina()` falla con "Solo un administrador puede generar la nómina"
+  si lo llama alguien que no es admin.
+- El segundo ponche abierto del mismo empleado es rechazado por el índice.
+- Una nómina cerrada rechaza el UPDATE, pero acepta que la reabran.
 
 ---
 
