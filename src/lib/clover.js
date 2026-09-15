@@ -1,25 +1,28 @@
-const CLOVER_TOKEN = import.meta.env.VITE_CLOVER_API_TOKEN
-const MERCHANT_ID = import.meta.env.VITE_CLOVER_MERCHANT_ID
-const BASE_URL = `https://api.clover.com/v3/merchants/${MERCHANT_ID}`
+import { supabase } from './supabase'
 
-const headers = {
-  'Authorization': `Bearer ${CLOVER_TOKEN}`,
-  'Content-Type': 'application/json',
-}
+// La llamada a api.clover.com ya NO se hace desde aqui. Pasa por el Edge
+// Function clover-sync, que guarda CLOVER_API_TOKEN como secreto del
+// proyecto. Antes ese token viajaba en el bundle (VITE_CLOVER_API_TOKEN) y
+// era visible para cualquiera que abriera la app; ademas api.clover.com no
+// manda cabeceras CORS, asi que la llamada directa desde el navegador nunca
+// pudo haber completado. Ver supabase/functions/clover-sync/index.ts.
 
 export async function getVentasDelDia(fecha) {
-  const startOfDay = new Date(fecha + 'T00:00:00')
-  const endOfDay = new Date(fecha + 'T23:59:59')
-  const startMs = startOfDay.getTime()
-  const endMs = endOfDay.getTime()
+  const { data, error } = await supabase.functions.invoke('clover-sync', {
+    body: { fecha },
+  })
 
-  const response = await fetch(
-    `${BASE_URL}/line_items?filter=createdTime>=${startMs}&filter=createdTime<=${endMs}&expand=item&limit=1000`,
-    { headers }
-  )
-  if (!response.ok) throw new Error('Error conectando con Clover: ' + response.status)
-  const data = await response.json()
-  return data.elements || []
+  if (error) {
+    let detalle = error.message
+    try {
+      const cuerpo = await error.context?.json()
+      if (cuerpo?.error) detalle = cuerpo.error
+    } catch { /* la respuesta no era JSON */ }
+    throw new Error(detalle)
+  }
+  if (!data?.ok) throw new Error('El servidor no devolvió datos de Clover.')
+
+  return data.items || []
 }
 
 export function procesarVentasClover(lineItems) {

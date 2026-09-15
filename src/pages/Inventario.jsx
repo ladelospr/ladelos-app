@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "../lib/supabase";
+import { TIENDAS } from "../lib/constants";
 
-const TIENDAS = ["Bayamón", "Cataño"];
 const FRACCIONES = [
   { label: "0", value: 0 },
   { label: "¼", value: 0.25 },

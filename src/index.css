@@ -1,3 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Reglas propias de Ladelos: van despues de Tailwind para poder
+   sobrescribir el preflight en los modulos que usan estilos inline. */
+
+/* Compatibilidad con los modulos que usan estilos inline.
+   El preflight de Tailwind deja h1-h6 con el tamano y peso heredados y sin
+   margenes; paginas como Cocina, Compras o Mayoristas usan <h2> pelado y
+   contaban con los valores por defecto del navegador. Se restauran aqui.
+   Los modulos nuevos siguen mandando con sus clases, que ganan por
+   especificidad (clase 0-1-0 vs elemento 0-0-1). */
+h1 { font-size: 2em;    font-weight: bold; margin: 0.67em 0; }
+h2 { font-size: 1.5em;  font-weight: bold; margin: 0.83em 0; }
+h3 { font-size: 1.17em; font-weight: bold; margin: 1em 0; }
+
 *, *::before, *::after { box-sizing: border-box; }
 
 body {
