@@ -2,6 +2,7 @@ import { useState, useEffect, Suspense, lazy } from 'react'
 import { useAuth } from './contexts/AuthContext'
 import Layout from './components/Layout'
 import Login from './pages/Login'
+import WebsitePublica from './pages/WebsitePublica'
 import { MODULO_ACCESO } from './lib/constants'
 
 // Lazy load de páginas
@@ -50,6 +51,8 @@ function getDefaultTab(rol) {
 export default function App() {
   const { user, profile, loading } = useAuth()
   const [activeTab, setActiveTab] = useState(null)
+  // Variable para alternar entre website pública (desarrollo) y app interna
+  const [showWebsite] = useState(import.meta.env.VITE_SHOW_WEBSITE === 'true' ? true : !user)
 
   useEffect(() => {
     if (profile) setActiveTab(getDefaultTab(profile.rol))
@@ -63,6 +66,9 @@ export default function App() {
       </div>
     </div>
   )
+
+  // Mostrar website pública si no hay usuario o si VITE_SHOW_WEBSITE está activado
+  if (showWebsite) return <WebsitePublica />
 
   if (!user) return <Login />
 
