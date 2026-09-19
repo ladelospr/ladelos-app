@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ChevronDown, Menu, X, ShoppingCart, Instagram, MapPin, Phone } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 
 const BRAND_COLORS = {
   azulClaro: '#6AA0CF',
@@ -11,31 +11,30 @@ const BRAND_COLORS = {
   dark: '#1a1a1a',
   rosaClaro: '#FFB6D9',
   verdeClaro: '#A8D8BA',
-  amarilloClaro: '#FFD700',
 }
 
 const MENU_ITEMS = {
   'Clásicos': [
-    { id: 1, name: 'Pastelillo de Carne', desc: 'Carne molida, queso americano y verduras', image: '🥟' },
-    { id: 2, name: 'Pastelillo de Queso', desc: 'Queso fresco y crema, receta tradicional', image: '🧀' },
-    { id: 3, name: 'Pastelillo de Jamón y Queso', desc: 'Jamón serrano, queso y pimienta', image: '🍖' },
+    { id: 1, name: 'Pastelillo de Carne', desc: 'Carne molida, queso americano y verduras fritas', image: '🥟' },
+    { id: 2, name: 'Pastelillo de Queso', desc: 'Queso fresco y crema, receta tradicional puertorriqueña', image: '🧀' },
+    { id: 3, name: 'Pastelillo de Jamón y Queso', desc: 'Jamón serrano premium, queso y pimienta', image: '🍖' },
   ],
   'Gourmet': [
-    { id: 4, name: 'Pastelillo Camarones', desc: 'Camarones frescos, cilantro y limón', image: '🦐' },
-    { id: 5, name: 'Pastelillo Picante Crab', desc: 'Cangrejo, especias y sriracha', image: '🦀' },
-    { id: 6, name: 'Pastelillo Pizza', desc: 'Mozzarella, pepperoni y salsa italiana', image: '🍕' },
+    { id: 4, name: 'Pastelillo Camarones', desc: 'Camarones frescos, cilantro y limón fresco', image: '🦐' },
+    { id: 5, name: 'Pastelillo Picante Crab', desc: 'Cangrejo de roca, especias picantes y sriracha', image: '🦀' },
+    { id: 6, name: 'Pastelillo Relleno Mixto', desc: 'Combinación especial de carnes y quesos', image: '🍖' },
   ],
   'Especiales': [
-    { id: 7, name: 'Pastelillo Vegetariano', desc: 'Champiñones, espinaca y queso ricotta', image: '🥬' },
-    { id: 8, name: 'Pastelillo Barbecue', desc: 'Cerdo desmenuzado con salsa BBQ', image: '🍖' },
+    { id: 7, name: 'Pastelillo Vegetariano', desc: 'Champiñones, espinaca fresca y queso ricotta', image: '🥬' },
+    { id: 8, name: 'Pastelillo BBQ Cerdo', desc: 'Cerdo desmenuzado lentamente con salsa BBQ casera', image: '🍗' },
   ],
 }
 
 const MERCH_ITEMS = [
-  { id: 101, name: 'Camiseta Clásica', price: '$25', image: '👕', category: 'Ropa' },
-  { id: 102, name: 'Gorra Ladelos', price: '$18', image: '🧢', category: 'Accesorios' },
-  { id: 103, name: 'Taza Pastelillos', price: '$14', image: '☕', category: 'Hogar' },
-  { id: 104, name: 'Hoodie Premium', price: '$45', image: '🧥', category: 'Ropa' },
+  { id: 101, name: 'Camiseta Clásica', price: '$25', image: '👕', category: 'Ropa', color: BRAND_COLORS.naranja },
+  { id: 102, name: 'Gorra Ladelos', price: '$18', image: '🧢', category: 'Accesorios', color: BRAND_COLORS.turquesa },
+  { id: 103, name: 'Taza Pastelillos', price: '$14', image: '☕', category: 'Hogar', color: BRAND_COLORS.azulClaro },
+  { id: 104, name: 'Hoodie Premium', price: '$45', image: '🧥', category: 'Ropa', color: BRAND_COLORS.azulOscuro },
 ]
 
 export default function WebsitePublica() {
@@ -139,104 +138,134 @@ export default function WebsitePublica() {
 
       {/* HERO - GIAN MAUROS STYLE */}
       <section style={{
-        background: `linear-gradient(135deg, ${BRAND_COLORS.azulClaro} 0%, ${BRAND_COLORS.turquesa} 50%, ${BRAND_COLORS.naranja} 100%)`,
-        padding: '3rem 1rem',
+        background: `linear-gradient(135deg, ${BRAND_COLORS.azulClaro} 0%, ${BRAND_COLORS.turquesa} 40%, ${BRAND_COLORS.naranja} 100%)`,
+        padding: '5rem 1rem 4rem',
         textAlign: 'center',
         color: BRAND_COLORS.white,
         position: 'relative',
         overflow: 'hidden',
       }}>
-        {/* Decorative elements */}
+        {/* Decorative pastelillo elements */}
         <div style={{
           position: 'absolute',
-          top: '-50px',
-          right: '-50px',
-          fontSize: '120px',
-          opacity: 0.1,
-          transform: 'rotate(-15deg)',
-        }}>🌮</div>
+          top: '5%',
+          right: '5%',
+          fontSize: '140px',
+          opacity: 0.08,
+          transform: 'rotate(-20deg)',
+          animation: 'float 4s ease-in-out infinite',
+        }}>🥟</div>
         <div style={{
           position: 'absolute',
-          bottom: '-30px',
-          left: '-30px',
-          fontSize: '100px',
-          opacity: 0.1,
-          transform: 'rotate(25deg)',
+          bottom: '8%',
+          left: '3%',
+          fontSize: '110px',
+          opacity: 0.07,
+          transform: 'rotate(30deg)',
+          animation: 'float 5s ease-in-out infinite 0.5s',
         }}>✨</div>
+        <div style={{
+          position: 'absolute',
+          top: '20%',
+          left: '8%',
+          fontSize: '90px',
+          opacity: 0.06,
+          animation: 'float 6s ease-in-out infinite 1s',
+        }}>🍖</div>
 
-        <div style={{ maxWidth: '600px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
-          <div style={{ fontSize: '64px', marginBottom: '1rem', animation: 'bounce 2s infinite' }}>🌮</div>
+        <div style={{ maxWidth: '680px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+          <div style={{
+            fontSize: '80px',
+            marginBottom: '1.5rem',
+            animation: 'bounce 2.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite',
+            filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.2))',
+          }}>🥟</div>
           <h1 style={{
-            fontSize: '48px',
+            fontSize: 'clamp(36px, 8vw, 56px)',
             fontWeight: 900,
             marginBottom: '1rem',
             fontStyle: 'italic',
-            letterSpacing: '-2px',
-            textShadow: '2px 2px 4px rgba(0,0,0,0.2)',
+            letterSpacing: '-1px',
+            textShadow: '3px 3px 6px rgba(0,0,0,0.25)',
+            lineHeight: 1.1,
           }}>
-            Hechas a Mano<br />Cada Día
+            Pastelillos Artesanales<br />Hechos con 💜
           </h1>
           <p style={{
-            fontSize: '18px',
-            marginBottom: '0.5rem',
-            fontWeight: 700,
+            fontSize: '20px',
+            marginBottom: '1rem',
+            fontWeight: 800,
+            textShadow: '2px 2px 4px rgba(0,0,0,0.2)',
           }}>
-            Más de 40 sabores frescos
+            Más de 40 sabores auténticos
           </p>
           <p style={{
-            fontSize: '14px',
-            marginBottom: '2rem',
-            lineHeight: 1.6,
-            opacity: 0.95,
+            fontSize: '16px',
+            marginBottom: '2.5rem',
+            lineHeight: 1.7,
+            opacity: 0.98,
+            maxWidth: '500px',
+            margin: '0 auto 2.5rem',
           }}>
-            Desde Carne y Queso hasta Carbonara, Montecristo, Cubano y Philly Cheesesteak. Siempre hay un nuevo favorito por descubrir.
+            Cada pastelillo es preparado diariamente en Puerto Rico con ingredientes frescos y amor. Desde clásicos tradicionales hasta creaciones gourmet, tenemos tu nuevo favorito.
           </p>
 
-          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+          <div style={{ display: 'flex', gap: '1.2rem', flexWrap: 'wrap', justifyContent: 'center', maxWidth: '600px', margin: '0 auto' }}>
             <button style={{
               backgroundColor: BRAND_COLORS.naranja,
               color: BRAND_COLORS.white,
               border: 'none',
-              padding: '1rem 2rem',
-              fontSize: '16px',
-              fontWeight: 700,
+              padding: '1.2rem 2.5rem',
+              fontSize: '17px',
+              fontWeight: 800,
               borderRadius: '50px',
               cursor: 'pointer',
-              transition: 'transform 0.2s, box-shadow 0.2s',
+              transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
               flex: '1',
-              minWidth: '150px',
-              maxWidth: '280px',
-              boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
+              minWidth: '180px',
+              maxWidth: '300px',
+              boxShadow: '0 6px 20px rgba(255, 160, 53, 0.4)',
+              position: 'relative',
+              overflow: 'hidden',
             }}
             onMouseEnter={(e) => {
-              e.target.style.transform = 'scale(1.05)';
-              e.target.style.boxShadow = '0 6px 20px rgba(0,0,0,0.3)';
+              e.target.style.transform = 'scale(1.08) translateY(-2px)';
+              e.target.style.boxShadow = '0 10px 30px rgba(255, 160, 53, 0.6)';
             }}
             onMouseLeave={(e) => {
-              e.target.style.transform = 'scale(1)';
-              e.target.style.boxShadow = '0 4px 15px rgba(0,0,0,0.2)';
+              e.target.style.transform = 'scale(1) translateY(0)';
+              e.target.style.boxShadow = '0 6px 20px rgba(255, 160, 53, 0.4)';
             }}
             >
-              Ordena Ahora
+              Realizar Pedido 🎉
             </button>
             <button style={{
-              backgroundColor: 'rgba(255,255,255,0.9)',
+              backgroundColor: 'rgba(255,255,255,0.95)',
               color: BRAND_COLORS.azulOscuro,
               border: 'none',
-              padding: '1rem 2rem',
-              fontSize: '16px',
-              fontWeight: 700,
+              padding: '1.2rem 2.5rem',
+              fontSize: '17px',
+              fontWeight: 800,
               borderRadius: '50px',
               cursor: 'pointer',
-              transition: 'all 0.2s',
+              transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
               flex: '1',
-              minWidth: '150px',
-              maxWidth: '280px',
+              minWidth: '180px',
+              maxWidth: '300px',
+              boxShadow: '0 4px 15px rgba(255,255,255,0.5)',
             }}
-            onMouseEnter={(e) => e.target.style.backgroundColor = BRAND_COLORS.white}
-            onMouseLeave={(e) => e.target.style.backgroundColor = 'rgba(255,255,255,0.9)'}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = BRAND_COLORS.white;
+              e.target.style.transform = 'scale(1.08) translateY(-2px)';
+              e.target.style.boxShadow = '0 10px 30px rgba(6, 57, 148, 0.2)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = 'rgba(255,255,255,0.95)';
+              e.target.style.transform = 'scale(1) translateY(0)';
+              e.target.style.boxShadow = '0 4px 15px rgba(255,255,255,0.5)';
+            }}
             >
-              Ver Menú
+              Ver Catálogo 📋
             </button>
           </div>
         </div>
@@ -244,8 +273,25 @@ export default function WebsitePublica() {
 
       <style>{`
         @keyframes bounce {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-10px); }
+          0%, 100% { transform: translateY(0) rotate(0deg); }
+          25% { transform: translateY(-15px) rotate(-2deg); }
+          50% { transform: translateY(-25px) rotate(0deg); }
+          75% { transform: translateY(-15px) rotate(2deg); }
+        }
+
+        @keyframes float {
+          0%, 100% { transform: translateY(0px) rotate(var(--rotation, 0deg)); }
+          50% { transform: translateY(-20px) rotate(var(--rotation, 0deg)); }
+        }
+
+        @keyframes slideInUp {
+          from { opacity: 0; transform: translateY(30px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.8; }
         }
       `}</style>
 
@@ -253,45 +299,53 @@ export default function WebsitePublica() {
       <section style={{
         maxWidth: '1200px',
         margin: '0 auto',
-        padding: '3rem 1rem',
+        padding: '4rem 1rem 3rem',
+        backgroundColor: '#fafafa',
+        borderRadius: '0',
       }}>
         <div style={{
           textAlign: 'center',
-          marginBottom: '2rem',
+          marginBottom: '3rem',
+          animation: 'slideInUp 0.6s ease-out',
         }}>
           <div style={{
             display: 'inline-block',
-            fontSize: '14px',
-            fontWeight: 700,
+            fontSize: '13px',
+            fontWeight: 800,
             color: BRAND_COLORS.naranja,
-            marginBottom: '0.5rem',
+            marginBottom: '0.75rem',
+            letterSpacing: '2px',
+            textTransform: 'uppercase',
           }}>
-            ✨ NUESTROS FAVORITOS ✨
+            ✨ Nuestros Favoritos ✨
           </div>
           <h2 style={{
-            fontSize: '40px',
+            fontSize: 'clamp(32px, 6vw, 48px)',
             fontWeight: 900,
-            marginBottom: '0.5rem',
+            marginBottom: '1rem',
             textAlign: 'center',
             color: BRAND_COLORS.azulOscuro,
-            lineHeight: 1.2,
+            lineHeight: 1.1,
+            fontStyle: 'italic',
           }}>
-            Clásicos que<br />nunca fallan 🤤
+            Clásicos que nunca fallan
           </h2>
           <p style={{
             fontSize: '16px',
             color: '#666',
             marginTop: '1rem',
+            maxWidth: '500px',
+            margin: '1rem auto 0',
           }}>
-            Probados y aprobados por nuestros clientes
+            Probados y aprobados por nuestros clientes. Recetas auténticas hechas con amor.
           </p>
         </div>
 
         {/* CATEGORY TABS - COLORFUL */}
         <div style={{
           display: 'flex',
-          gap: '0.8rem',
-          marginBottom: '2.5rem',
+          gap: '1rem',
+          marginBottom: '3.5rem',
           flexWrap: 'wrap',
           justifyContent: 'center',
         }}>
@@ -307,17 +361,17 @@ export default function WebsitePublica() {
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
                 style={{
-                  padding: '0.9rem 2rem',
-                  border: 'none',
+                  padding: '1rem 2.2rem',
+                  border: '3px solid transparent',
                   borderRadius: '50px',
-                  fontSize: '15px',
+                  fontSize: '16px',
                   fontWeight: 800,
                   cursor: 'pointer',
                   backgroundColor: selectedCategory === cat ? color.bg : '#f0f0f0',
-                  color: selectedCategory === cat ? color.text : '#666',
-                  transition: 'all 0.3s',
-                  boxShadow: selectedCategory === cat ? `0 4px 15px ${color.bg}40` : 'none',
-                  transform: selectedCategory === cat ? 'scale(1.05)' : 'scale(1)',
+                  color: selectedCategory === cat ? color.text : '#555',
+                  transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                  boxShadow: selectedCategory === cat ? `0 6px 20px ${color.bg}50` : '0 2px 8px rgba(0,0,0,0.08)',
+                  transform: selectedCategory === cat ? 'scale(1.08)' : 'scale(1)',
                 }}
               >
                 {cat}
@@ -329,60 +383,68 @@ export default function WebsitePublica() {
         {/* MENU ITEMS GRID - COLORFUL */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-          gap: '1.8rem',
-          marginBottom: '2.5rem',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+          gap: '2rem',
+          marginBottom: '3rem',
         }}>
           {MENU_ITEMS[selectedCategory].map((item, idx) => {
-            const bgColors = [BRAND_COLORS.crema, '#FFE5E5', '#E5F0FF'];
-            const borderColors = [BRAND_COLORS.naranja, BRAND_COLORS.turquesa, BRAND_COLORS.azulClaro];
+            const bgColors = [BRAND_COLORS.crema, '#FFE5E5', '#E5F0FF', '#FFF5EB'];
+            const borderColors = [BRAND_COLORS.naranja, BRAND_COLORS.turquesa, BRAND_COLORS.azulClaro, BRAND_COLORS.rosaClaro];
             return (
               <div
                 key={item.id}
                 style={{
-                  backgroundColor: bgColors[idx % 3],
-                  borderRadius: '20px',
-                  padding: '2rem 1.5rem',
-                  border: `4px solid ${borderColors[idx % 3]}`,
+                  backgroundColor: bgColors[idx % 4],
+                  borderRadius: '24px',
+                  padding: '2.5rem 2rem',
+                  border: `5px solid ${borderColors[idx % 4]}`,
                   textAlign: 'center',
-                  transition: 'all 0.3s',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+                  transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                  boxShadow: '0 4px 15px rgba(0,0,0,0.08)',
                   cursor: 'pointer',
+                  animation: `slideInUp 0.6s ease-out ${idx * 0.1}s backwards`,
+                  position: 'relative',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-8px)';
-                  e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.15)';
+                  e.currentTarget.style.transform = 'translateY(-12px) scale(1.02)';
+                  e.currentTarget.style.boxShadow = '0 12px 35px rgba(0,0,0,0.18)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
+                  e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.08)';
                 }}
               >
-                <div style={{ fontSize: '56px', marginBottom: '1rem' }}>{item.image}</div>
+                <div style={{ fontSize: '64px', marginBottom: '1.2rem', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))' }}>{item.image}</div>
                 <h3 style={{
-                  fontSize: '20px',
-                  fontWeight: 800,
-                  marginBottom: '0.5rem',
+                  fontSize: '22px',
+                  fontWeight: 900,
+                  marginBottom: '0.75rem',
                   color: BRAND_COLORS.azulOscuro,
+                  lineHeight: 1.2,
                 }}>
                   {item.name}
                 </h3>
                 <p style={{
-                  fontSize: '14px',
+                  fontSize: '15px',
                   color: '#555',
-                  marginBottom: '1.2rem',
-                  lineHeight: 1.6,
-                  minHeight: '50px',
+                  marginBottom: '1.5rem',
+                  lineHeight: 1.7,
+                  minHeight: '60px',
                 }}>
                   {item.desc}
                 </p>
                 <div style={{
-                  padding: '0.75rem',
-                  backgroundColor: borderColors[idx % 3],
-                  borderRadius: '10px',
+                  padding: '0.9rem',
+                  backgroundColor: borderColors[idx % 4],
+                  borderRadius: '12px',
                   color: BRAND_COLORS.white,
-                  fontSize: '12px',
-                  fontWeight: 700,
+                  fontSize: '13px',
+                  fontWeight: 800,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem',
+                  boxShadow: `0 4px 12px ${borderColors[idx % 4]}40`,
                 }}>
                   ⏱️ Requiere 2 días de anticipación
                 </div>
@@ -394,46 +456,51 @@ export default function WebsitePublica() {
         {/* CTA */}
         <div style={{
           textAlign: 'center',
-          marginBottom: '2rem',
+          marginBottom: '3rem',
+          animation: 'slideInUp 0.6s ease-out 0.3s backwards',
         }}>
           <button style={{
             backgroundColor: BRAND_COLORS.naranja,
             color: BRAND_COLORS.white,
             border: 'none',
-            padding: '1.2rem 3rem',
-            fontSize: '17px',
-            fontWeight: 800,
+            padding: '1.3rem 3.5rem',
+            fontSize: '18px',
+            fontWeight: 900,
             borderRadius: '50px',
             cursor: 'pointer',
-            transition: 'all 0.3s',
-            boxShadow: '0 4px 15px rgba(255, 160, 53, 0.4)',
+            transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+            boxShadow: '0 8px 25px rgba(255, 160, 53, 0.5)',
+            position: 'relative',
+            overflow: 'hidden',
           }}
           onMouseEnter={(e) => {
-            e.target.style.transform = 'scale(1.08)';
-            e.target.style.boxShadow = '0 6px 25px rgba(255, 160, 53, 0.6)';
+            e.target.style.transform = 'scale(1.1) translateY(-3px)';
+            e.target.style.boxShadow = '0 12px 35px rgba(255, 160, 53, 0.7)';
           }}
           onMouseLeave={(e) => {
-            e.target.style.transform = 'scale(1)';
-            e.target.style.boxShadow = '0 4px 15px rgba(255, 160, 53, 0.4)';
+            e.target.style.transform = 'scale(1) translateY(0)';
+            e.target.style.boxShadow = '0 8px 25px rgba(255, 160, 53, 0.5)';
           }}
           >
-            Explorar Todos los Sabores →
+            Ver Todos los Sabores 🎉
           </button>
         </div>
 
         <div style={{
           textAlign: 'center',
-          padding: '2rem',
-          backgroundColor: '#f8f8f8',
-          borderRadius: '16px',
-          border: `3px dashed ${BRAND_COLORS.turquesa}`,
-          color: '#666',
+          padding: '2.5rem 2rem',
+          backgroundColor: '#fff',
+          borderRadius: '20px',
+          border: `4px dashed ${BRAND_COLORS.turquesa}`,
+          color: BRAND_COLORS.azulOscuro,
+          boxShadow: '0 4px 15px rgba(0,0,0,0.07)',
+          animation: 'slideInUp 0.6s ease-out 0.4s backwards',
         }}>
-          <p style={{ marginBottom: '0.5rem', fontSize: '16px', fontWeight: 700 }}>
+          <p style={{ marginBottom: '0.7rem', fontSize: '18px', fontWeight: 800 }}>
             ℹ️ El menú es ilustrativo
           </p>
-          <p style={{ fontSize: '14px', margin: 0 }}>
-            Para hacer tu pedido con anticipación, escríbenos por WhatsApp
+          <p style={{ fontSize: '15px', margin: 0, color: '#666' }}>
+            Para realizar tu pedido con 2 días de anticipación, escríbenos por WhatsApp
           </p>
         </div>
       </section>
@@ -442,44 +509,48 @@ export default function WebsitePublica() {
       <section style={{
         maxWidth: '1200px',
         margin: '0 auto',
-        padding: '3rem 1rem',
+        padding: '4rem 1rem 3rem',
       }}>
         <div style={{
           textAlign: 'center',
-          marginBottom: '2.5rem',
+          marginBottom: '3.5rem',
+          animation: 'slideInUp 0.6s ease-out',
         }}>
           <div style={{
             display: 'inline-block',
-            fontSize: '14px',
-            fontWeight: 700,
+            fontSize: '13px',
+            fontWeight: 800,
             color: BRAND_COLORS.azulClaro,
-            marginBottom: '0.5rem',
+            marginBottom: '0.75rem',
+            letterSpacing: '2px',
+            textTransform: 'uppercase',
           }}>
-            🎁 EXCLUSIVA 🎁
+            🎁 Exclusiva 🎁
           </div>
           <h2 style={{
-            fontSize: '40px',
+            fontSize: 'clamp(32px, 6vw, 48px)',
             fontWeight: 900,
             marginBottom: '1rem',
             textAlign: 'center',
             color: BRAND_COLORS.azulOscuro,
+            fontStyle: 'italic',
           }}>
             Merch Oficial Ladelos
           </h2>
           <p style={{
             fontSize: '16px',
             color: '#666',
-            marginBottom: '0.5rem',
-            fontWeight: 600,
+            marginBottom: '0',
+            fontWeight: 700,
           }}>
-            ✈️ Envío inmediato a cualquier lugar
+            ✈️ Envío inmediato a cualquier lugar del mundo
           </p>
         </div>
 
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-          gap: '1.8rem',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+          gap: '2.2rem',
         }}>
           {MERCH_ITEMS.map((item, idx) => {
             const colorMap = [
@@ -494,67 +565,70 @@ export default function WebsitePublica() {
                 key={item.id}
                 style={{
                   backgroundColor: colors.bg,
-                  border: `3px solid ${colors.border}`,
-                  borderRadius: '18px',
-                  padding: '2rem 1.5rem',
+                  border: `5px solid ${colors.border}`,
+                  borderRadius: '24px',
+                  padding: '2.5rem 2rem',
                   textAlign: 'center',
-                  transition: 'all 0.3s',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+                  transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                  boxShadow: '0 4px 15px rgba(0,0,0,0.08)',
+                  animation: `slideInUp 0.6s ease-out ${idx * 0.1}s backwards`,
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-8px)';
-                  e.currentTarget.style.boxShadow = `0 8px 25px ${colors.border}40`;
+                  e.currentTarget.style.transform = 'translateY(-12px) scale(1.02)';
+                  e.currentTarget.style.boxShadow = `0 12px 35px ${colors.border}40`;
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
+                  e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.08)';
                 }}
               >
-                <div style={{ fontSize: '72px', marginBottom: '1rem' }}>{item.image}</div>
+                <div style={{ fontSize: '80px', marginBottom: '1rem', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))' }}>{item.image}</div>
                 <h3 style={{
-                  fontSize: '18px',
-                  fontWeight: 800,
-                  marginBottom: '0.3rem',
+                  fontSize: '20px',
+                  fontWeight: 900,
+                  marginBottom: '0.5rem',
                   color: BRAND_COLORS.azulOscuro,
                 }}>
                   {item.name}
                 </h3>
                 <p style={{
-                  fontSize: '13px',
+                  fontSize: '14px',
                   color: '#999',
-                  marginBottom: '1rem',
-                  fontWeight: 600,
+                  marginBottom: '1.2rem',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px',
                 }}>
                   {item.category}
                 </p>
                 <div style={{
-                  fontSize: '24px',
+                  fontSize: '28px',
                   fontWeight: 900,
                   color: colors.border,
-                  marginBottom: '1.2rem',
+                  marginBottom: '1.5rem',
                 }}>
                   {item.price}
                 </div>
                 <button style={{
                   width: '100%',
-                  padding: '1rem',
+                  padding: '1.1rem',
                   backgroundColor: colors.border,
                   color: BRAND_COLORS.white,
                   border: 'none',
-                  borderRadius: '12px',
-                  fontWeight: 800,
+                  borderRadius: '14px',
+                  fontWeight: 900,
                   cursor: 'pointer',
-                  fontSize: '15px',
-                  transition: 'all 0.2s',
-                  boxShadow: `0 4px 12px ${colors.border}40`,
+                  fontSize: '16px',
+                  transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                  boxShadow: `0 6px 18px ${colors.border}50`,
                 }}
                 onMouseEnter={(e) => {
-                  e.target.style.transform = 'scale(1.05)';
-                  e.target.style.boxShadow = `0 6px 18px ${colors.border}60`;
+                  e.target.style.transform = 'scale(1.08) translateY(-2px)';
+                  e.target.style.boxShadow = `0 10px 28px ${colors.border}70`;
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.transform = 'scale(1)';
-                  e.target.style.boxShadow = `0 4px 12px ${colors.border}40`;
+                  e.target.style.transform = 'scale(1) translateY(0)';
+                  e.target.style.boxShadow = `0 6px 18px ${colors.border}50`;
                 }}
                 >
                   🛒 Comprar Ahora
@@ -569,41 +643,51 @@ export default function WebsitePublica() {
       <section style={{
         background: `linear-gradient(135deg, ${BRAND_COLORS.azulOscuro} 0%, ${BRAND_COLORS.azulClaro} 100%)`,
         color: BRAND_COLORS.white,
-        padding: '4rem 1rem',
+        padding: '5rem 1rem 4rem',
         textAlign: 'center',
         position: 'relative',
         overflow: 'hidden',
       }}>
-        {/* Decorative elements */}
+        {/* Decorative pastelillo elements */}
         <div style={{
           position: 'absolute',
-          top: '-30px',
-          right: '-30px',
-          fontSize: '80px',
+          top: '10%',
+          right: '5%',
+          fontSize: '120px',
+          opacity: 0.06,
+          animation: 'float 5s ease-in-out infinite',
+        }}>🥟</div>
+        <div style={{
+          position: 'absolute',
+          bottom: '10%',
+          left: '5%',
+          fontSize: '100px',
           opacity: 0.05,
-        }}>🌮</div>
+          animation: 'float 6s ease-in-out infinite 0.5s',
+        }}>✨</div>
 
-        <div style={{ maxWidth: '600px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+        <div style={{ maxWidth: '700px', margin: '0 auto', position: 'relative', zIndex: 1, animation: 'slideInUp 0.6s ease-out' }}>
           <h2 style={{
-            fontSize: '40px',
+            fontSize: 'clamp(32px, 6vw, 48px)',
             fontWeight: 900,
-            marginBottom: '1rem',
+            marginBottom: '1.5rem',
+            fontStyle: 'italic',
           }}>
             ¿Por qué elegir Ladelos?
           </h2>
           <p style={{
             fontSize: '18px',
-            marginBottom: '2.5rem',
-            opacity: 0.95,
-            lineHeight: 1.6,
+            marginBottom: '3rem',
+            opacity: 0.98,
+            lineHeight: 1.8,
           }}>
-            Contacta con nosotros y ten tus pastelillos favoritos listos para disfrutar 💜
+            Pastelillos hechos con amor, ingredientes frescos y tradición puertorriqueña. Contáctanos para disfrutar 💜
           </p>
 
           <div style={{
             display: 'grid',
-            gap: '1.2rem',
-            marginBottom: '2.5rem',
+            gap: '1.3rem',
+            marginBottom: '3rem',
           }}>
             <a href="https://wa.me/17871234567" style={{
               display: 'flex',
@@ -612,18 +696,27 @@ export default function WebsitePublica() {
               gap: '1rem',
               color: BRAND_COLORS.white,
               textDecoration: 'none',
-              fontSize: '16px',
-              fontWeight: 700,
-              padding: '1rem',
+              fontSize: '17px',
+              fontWeight: 800,
+              padding: '1.2rem',
               backgroundColor: 'rgba(255,255,255,0.15)',
-              borderRadius: '12px',
-              transition: 'all 0.3s',
+              borderRadius: '16px',
+              transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
               backdropFilter: 'blur(10px)',
+              border: '2px solid rgba(255,255,255,0.2)',
             }}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.25)'}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.15)'}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.25)';
+              e.currentTarget.style.transform = 'translateY(-4px)';
+              e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.2)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.15)';
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = 'none';
+            }}
             >
-              💬 WhatsApp: +1 (787) 123-4567
+              💬 WhatsApp
             </a>
 
             <a href="https://instagram.com/ladelospr" style={{
@@ -633,18 +726,27 @@ export default function WebsitePublica() {
               gap: '1rem',
               color: BRAND_COLORS.white,
               textDecoration: 'none',
-              fontSize: '16px',
-              fontWeight: 700,
-              padding: '1rem',
+              fontSize: '17px',
+              fontWeight: 800,
+              padding: '1.2rem',
               backgroundColor: 'rgba(255,255,255,0.15)',
-              borderRadius: '12px',
-              transition: 'all 0.3s',
+              borderRadius: '16px',
+              transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
               backdropFilter: 'blur(10px)',
+              border: '2px solid rgba(255,255,255,0.2)',
             }}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.25)'}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.15)'}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.25)';
+              e.currentTarget.style.transform = 'translateY(-4px)';
+              e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.2)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.15)';
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = 'none';
+            }}
             >
-              📷 Instagram: @ladelospr
+              📷 Instagram
             </a>
 
             <a href="https://maps.google.com" style={{
@@ -654,16 +756,25 @@ export default function WebsitePublica() {
               gap: '1rem',
               color: BRAND_COLORS.white,
               textDecoration: 'none',
-              fontSize: '16px',
-              fontWeight: 700,
-              padding: '1rem',
+              fontSize: '17px',
+              fontWeight: 800,
+              padding: '1.2rem',
               backgroundColor: 'rgba(255,255,255,0.15)',
-              borderRadius: '12px',
-              transition: 'all 0.3s',
+              borderRadius: '16px',
+              transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
               backdropFilter: 'blur(10px)',
+              border: '2px solid rgba(255,255,255,0.2)',
             }}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.25)'}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.15)'}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.25)';
+              e.currentTarget.style.transform = 'translateY(-4px)';
+              e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.2)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.15)';
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = 'none';
+            }}
             >
               📍 San Juan, PR
             </a>
@@ -671,28 +782,28 @@ export default function WebsitePublica() {
 
           <button style={{
             width: '100%',
-            maxWidth: '350px',
-            padding: '1.3rem',
+            maxWidth: '380px',
+            padding: '1.4rem 2rem',
             backgroundColor: BRAND_COLORS.naranja,
             color: BRAND_COLORS.white,
             border: 'none',
             borderRadius: '50px',
-            fontSize: '17px',
-            fontWeight: 800,
+            fontSize: '18px',
+            fontWeight: 900,
             cursor: 'pointer',
-            transition: 'all 0.3s',
-            boxShadow: '0 4px 15px rgba(255, 160, 53, 0.4)',
+            transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+            boxShadow: '0 8px 25px rgba(255, 160, 53, 0.5)',
           }}
           onMouseEnter={(e) => {
-            e.target.style.transform = 'scale(1.08)';
-            e.target.style.boxShadow = '0 6px 25px rgba(255, 160, 53, 0.6)';
+            e.target.style.transform = 'scale(1.1) translateY(-3px)';
+            e.target.style.boxShadow = '0 12px 35px rgba(255, 160, 53, 0.7)';
           }}
           onMouseLeave={(e) => {
-            e.target.style.transform = 'scale(1)';
-            e.target.style.boxShadow = '0 4px 15px rgba(255, 160, 53, 0.4)';
+            e.target.style.transform = 'scale(1) translateY(0)';
+            e.target.style.boxShadow = '0 8px 25px rgba(255, 160, 53, 0.5)';
           }}
           >
-            💬 Escribir por WhatsApp
+            💬 Escríbeme por WhatsApp
           </button>
         </div>
       </section>
@@ -701,11 +812,25 @@ export default function WebsitePublica() {
       <footer style={{
         backgroundColor: BRAND_COLORS.azulOscuro,
         color: BRAND_COLORS.white,
-        padding: '2rem 1rem',
+        padding: '3rem 1rem',
         textAlign: 'center',
         fontSize: '14px',
+        position: 'relative',
+        overflow: 'hidden',
       }}>
-        <p>© 2025 Ladelos Pastelillos. Todos los derechos reservados. 💜</p>
+        <div style={{
+          position: 'absolute',
+          bottom: '-20px',
+          right: '-20px',
+          fontSize: '80px',
+          opacity: 0.04,
+        }}>🥟</div>
+        <p style={{ fontSize: '15px', fontWeight: 600, marginBottom: '0.5rem', position: 'relative', zIndex: 1 }}>
+          © 2025 Ladelos Pastelillos. Hecho en 🇵🇷 con amor y tradición.
+        </p>
+        <p style={{ fontSize: '13px', opacity: 0.8, margin: 0, position: 'relative', zIndex: 1 }}>
+          Todos los derechos reservados 💜
+        </p>
       </footer>
     </div>
   )
