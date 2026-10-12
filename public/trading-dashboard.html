@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day Trading Dashboard</title>
+<style>
+  :root{
+    --bg:#0b0e14; --panel:#131824; --panel2:#1a2132; --line:#252d40; --text:#e6eaf2; --mute:#8b95ab;
+    --up:#22c55e; --down:#ef4444; --accent:#4f8cff; --warn:#f5a524;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:14px/1.4 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif}
+  header{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--line)}
+  h1{font-size:18px;margin:0;font-weight:600;letter-spacing:.2px}
+  .meta{display:flex;gap:10px;align-items:center;color:var(--mute);font-size:12px}
+  .badge{padding:3px 8px;border-radius:99px;font-size:11px;font-weight:600;background:var(--panel2);border:1px solid var(--line)}
+  .badge.live{color:var(--up)} .badge.demo{color:var(--warn)}
+  button{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer;font:inherit}
+  button:hover{border-color:var(--accent)}
+  .indices{display:flex;gap:10px;padding:12px 20px;overflow-x:auto}
+  .idx{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 14px;min-width:150px}
+  .idx b{display:block;font-size:12px;color:var(--mute);font-weight:500}
+  .idx span{font-variant-numeric:tabular-nums}
+  main{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:14px;padding:0 20px 24px}
+  @media(max-width:980px){main{grid-template-columns:1fr}}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;min-width:0}
+  .panel h2{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--mute);margin:0 0 10px;font-weight:600}
+  .up{color:var(--up)} .down{color:var(--down)}
+  .hero{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;align-items:flex-end;margin-bottom:8px}
+  .hero .sym{font-size:13px;color:var(--mute)}
+  .hero .px{font-size:34px;font-weight:600;font-variant-numeric:tabular-nums}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-top:12px}
+  .stat{background:var(--panel2);border-radius:8px;padding:8px 10px}
+  .stat small{display:block;color:var(--mute);font-size:11px}
+  .stat b{font-variant-numeric:tabular-nums;font-weight:600}
+  canvas{width:100%;height:320px;display:block}
+  table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+  th{color:var(--mute);font-weight:500;font-size:11px;text-align:right;padding:6px 8px;cursor:pointer;white-space:nowrap}
+  th:first-child,td:first-child{text-align:left}
+  td{padding:8px;text-align:right;border-top:1px solid var(--line);white-space:nowrap}
+  tbody tr{cursor:pointer} tbody tr:hover,tr.sel{background:var(--panel2)}
+  .sym-name{font-weight:600} .sym-name small{display:block;color:var(--mute);font-weight:400;font-size:11px}
+  .tag{font-size:10px;padding:2px 6px;border-radius:5px;font-weight:700}
+  .tag.buy{background:#22c55e22;color:var(--up)} .tag.sell{background:#ef444422;color:var(--down)} .tag.neutral{background:#8b95ab22;color:var(--mute)}
+  .movers{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .mv{display:flex;justify-content:space-between;padding:6px 0;border-top:1px solid var(--line)}
+  .apple-card{border-color:#4f8cff55;background:linear-gradient(160deg,#16203a,var(--panel))}
+  .right{display:flex;flex-direction:column;gap:14px}
+  .full{grid-column:1/-1}
+  footer{color:var(--mute);font-size:11px;padding:0 20px 24px}
+  .spark{width:80px;height:26px}
+</style>
+</head>
+<body>
+<header>
+  <h1>📈 Day Trading Dashboard <span style="color:var(--mute);font-weight:400"> · Finnhub en vivo</span></h1>
+  <div class="meta">
+    <span id="status" class="badge">Cargando…</span>
+    <span id="clock"></span>
+    <button id="keybtn">🔑 Clave Finnhub</button>
+    <button id="refresh">Actualizar</button>
+  </div>
+</header>
+<div class="indices" id="indices"></div>
+
+<main>
+  <section class="panel">
+    <div class="hero">
+      <div><div class="sym" id="hSym">—</div><div class="px" id="hPx">—</div></div>
+      <div id="hChg" style="font-size:18px;font-variant-numeric:tabular-nums"></div>
+    </div>
+    <canvas id="chart" height="320"></canvas>
+    <div class="stats" id="stats"></div>
+  </section>
+
+  <div class="right">
+    <section class="panel apple-card">
+      <h2> Apple (AAPL) · Destacada</h2>
+      <div id="apple"></div>
+    </section>
+    <section class="panel">
+      <h2>Top movers</h2>
+      <div class="movers"><div><div style="color:var(--up);font-size:12px;margin-bottom:4px">▲ Ganadoras</div><div id="gainers"></div></div>
+      <div><div style="color:var(--down);font-size:12px;margin-bottom:4px">▼ Perdedoras</div><div id="losers"></div></div></div>
+    </section>
+  </div>
+
+  <section class="panel full">
+    <h2>Watchlist · acciones más líquidas para day trading</h2>
+    <div style="overflow-x:auto">
+    <table>
+      <thead><tr>
+        <th data-k="sym">Símbolo</th><th data-k="price">Precio</th><th data-k="pct">% Día</th>
+        <th data-k="rvol">Vol. relativo</th><th data-k="volume">Volumen</th><th data-k="range">Rango día</th>
+        <th data-k="vwapDiff">vs VWAP</th><th data-k="rsi">RSI(14)</th><th>Señal</th><th>Intradía</th>
+      </tr></thead>
+      <tbody id="rows"></tbody>
+    </table></div>
+  </section>
+</main>
+<footer>
+  Datos en tiempo real de <b>Finnhub</b> (WebSocket, acciones de EE. UU.; clave gratuita en finnhub.io). Precio, máx/mín y cierre previo vienen de Finnhub; las velas de 1 min, VWAP, volumen y RSI se calculan con las operaciones recibidas <b>desde que abriste la página</b> (RSI aparece tras ~15 min). Sin clave se muestran <b>datos simulados</b> (“DEMO”). Los índices se muestran con ETFs (SPY, QQQ, DIA, IWM).
+  Las señales son solo orientativas y no constituyen asesoría financiera; el day trading implica alto riesgo de pérdida.
+</footer>
+
+<script>
+const WATCH = [
+  ["AAPL","Apple"],["NVDA","NVIDIA"],["TSLA","Tesla"],["AMD","AMD"],["MSFT","Microsoft"],["AMZN","Amazon"],
+  ["META","Meta"],["GOOGL","Alphabet"],["PLTR","Palantir"],["COIN","Coinbase"],["NFLX","Netflix"],["SPY","S&P 500 ETF"],["QQQ","Nasdaq 100 ETF"]
+];
+const INDICES = [["SPY","S&P 500 · SPY"],["QQQ","Nasdaq 100 · QQQ"],["DIA","Dow Jones · DIA"],["IWM","Russell 2000 · IWM"]];
+const BASE = {AAPL:230,NVDA:140,TSLA:250,AMD:160,MSFT:420,AMZN:190,META:560,GOOGL:175,PLTR:60,COIN:230,NFLX:700,SPY:570,QQQ:490,DIA:420,IWM:225};
+const ALL = [...new Set([...WATCH.map(w=>w[0]),...INDICES.map(i=>i[0])])];
+
+const state = {data:{}, selected:"AAPL", sort:{k:"volume",dir:-1}, demo:false};
+const $ = id => document.getElementById(id);
+const fmt = (n,d=2)=> n==null||isNaN(n)?"—":n.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});
+const fmtVol = n => n>=1e9?(n/1e9).toFixed(2)+"B":n>=1e6?(n/1e6).toFixed(1)+"M":n>=1e3?(n/1e3).toFixed(0)+"K":String(Math.round(n));
+const cls = n => n>=0?"up":"down";
+
+/* ---------- Data layer: Finnhub (WebSocket en vivo + REST) ---------- */
+const BAR_MS = 60000;
+let KEY = ""; try{ KEY = new URLSearchParams(location.search).get("key") || localStorage.getItem("finnhub_key") || ""; }catch(e){}
+const live = {};            // sym -> {prev,open,hi,lo,bars[]}
+let offline=false, syncTimer=null, ws=null, wsOpen=false, lastTick=0, retry=0, dirty=false, timer=null, badKey=false; offline=false;
+
+function demoBars(sym){
+  const base = BASE[sym]||100; let seed=[...sym].reduce((a,c)=>a+c.charCodeAt(0),0)+Math.floor(Date.now()/3e5);
+  const rnd=()=> (seed=(seed*16807)%2147483647)/2147483647;
+  const bars=[]; let p=base*(1+(rnd()-.5)*.02); const vol=base>=1000?0.0006:0.0018;
+  const now=new Date(); const open=new Date(now); open.setHours(9,30,0,0);
+  const n=Math.max(12,Math.min(78,Math.floor((now-open)/3e5)||78));
+  for(let day=2;day>=0;day--){
+  const cnt=day?78:n, st=open.getTime()-day*864e5;
+  for(let i=0;i<cnt;i++){
+    const o=p, c=o*(1+(rnd()-.48)*vol*2.2), h=Math.max(o,c)*(1+rnd()*vol), l=Math.min(o,c)*(1-rnd()*vol);
+    bars.push({t:st+i*3e5,o,h,l,c,v:Math.round((0.4+rnd())*(base<100?900000:300000)*(i<6||i>cnt-6?2:1))}); p=c;
+  }}
+  return build(sym,bars,base);
+}
+
+async function fetchQuote(sym){
+  const r = await fetch(`https://finnhub.io/api/v1/quote?symbol=${sym}&token=${encodeURIComponent(KEY)}`);
+  if(r.status===401||r.status===403){ badKey=true; throw new Error("key"); }
+  if(!r.ok) throw new Error("HTTP "+r.status);
+  const q = await r.json(); if(!q.c) throw new Error("sin datos");
+  return q;
+}
+
+async function syncQuotes(){
+  const res = await Promise.allSettled(ALL.map(async s=>{
+    const q = await fetchQuote(s), L = live[s] || (live[s]={bars:[]});
+    L.prev=q.pc; L.open=q.o||q.c; L.hi=q.h||q.c; L.lo=q.l||q.c;
+    const bucket=Math.floor(Date.now()/BAR_MS)*BAR_MS, last=L.bars[L.bars.length-1];
+    if(!last) L.bars.push({t:bucket,o:q.c,h:q.c,l:q.c,c:q.c,v:0});
+    else if(Date.now()-lastTick>BAR_MS*2) last.c=q.c;   // mercado sin ticks: refresca el último precio
+    recompute(s);
+  }));
+  return res.filter(r=>r.status==="fulfilled").length;
+}
+
+function recompute(sym){
+  const L=live[sym]; if(!L||!L.bars.length) return;
+  const d=build(sym,L.bars,L.prev);
+  d.open=L.open; d.hi=Math.max(L.hi,d.hi); d.lo=Math.min(L.lo,d.lo); d.range=(d.hi-d.lo)/d.price*100;
+  state.data[sym]=d;
+}
+
+function onTrade(sym,p,v,t){
+  const L=live[sym]; if(!L||!L.bars.length) return;
+  const bucket=Math.floor(t/BAR_MS)*BAR_MS; let b=L.bars[L.bars.length-1];
+  if(b.t!==bucket){ b={t:bucket,o:p,h:p,l:p,c:p,v:0}; L.bars.push(b); if(L.bars.length>400) L.bars.shift(); }
+  b.h=Math.max(b.h,p); b.l=Math.min(b.l,p); b.c=p; b.v+=v||0;
+  L.hi=Math.max(L.hi,p); L.lo=Math.min(L.lo,p);
+  lastTick=Date.now(); dirty=true;
+}
+
+function connectWS(){
+  if(!KEY||badKey) return;
+  ws=new WebSocket("wss://ws.finnhub.io?token="+encodeURIComponent(KEY));
+  ws.onopen=()=>{ wsOpen=true; retry=0; ALL.forEach(s=>ws.send(JSON.stringify({type:"subscribe",symbol:s}))); setStatus(); };
+  ws.onmessage=e=>{ const m=JSON.parse(e.data); if(m.type==="trade") m.data.forEach(t=>onTrade(t.s,t.p,t.v,t.t)); };
+  ws.onclose=()=>{ wsOpen=false; setStatus(); if(KEY&&!badKey) setTimeout(connectWS,Math.min(30000,1000*2**retry++)); };
+  ws.onerror=()=>ws.close();
+}
+
+function setStatus(){
+  const b=$("status"); let txt,c="badge";
+  if(!KEY){ txt="DEMO · conecta Finnhub (botón 🔑)"; c+=" demo"; }
+  else if(badKey){ txt="Clave inválida · usando DEMO"; c+=" demo"; }
+  else if(offline){ txt="Sin conexión con Finnhub · usando DEMO"; c+=" demo"; }
+  else if(!wsOpen){ txt="Conectando…"; }
+  else if(Date.now()-lastTick<15000){ txt="EN VIVO · Finnhub"; c+=" live"; }
+  else { txt="Conectado · sin operaciones (mercado cerrado)"; c+=" live"; }
+  b.textContent=txt; b.className=c;
+}
+
+function renderLoop(){   // máx. ~4 repintados por segundo
+  if(dirty){ dirty=false; ALL.forEach(recompute); render(); }
+  setStatus();
+}
+
+async function start(){
+  clearInterval(timer); clearInterval(syncTimer); if(ws){ ws.onclose=null; ws.close(); ws=null; } wsOpen=false;
+  badKey=false; 
+  if(KEY){
+    setStatus(); const ok=await syncQuotes();
+    if(!badKey && ok){ connectWS(); timer=setInterval(renderLoop,250); syncTimer=setInterval(()=>syncQuotes().then(render),60000); render(); return; }
+  }
+  offline=!!KEY&&!badKey; ALL.forEach(s=>state.data[s]=demoBars(s)); setStatus(); render();
+}
+
+
+function build(sym,allBars,prevClose){
+  // keep only the latest trading session
+  const dayKey = t=>new Date(t).toDateString();
+  const lastDay = dayKey(allBars[allBars.length-1].t);
+  const bars = allBars.filter(b=>dayKey(b.t)===lastDay);
+  const prior = allBars.filter(b=>dayKey(b.t)!==lastDay);
+  const priorDays = new Set(prior.map(b=>dayKey(b.t)));
+  const avgPriorVol = priorDays.size ? prior.reduce((a,b)=>a+b.v,0)/priorDays.size : null;
+  const price = bars[bars.length-1].c;
+  const prev = prevClose ?? bars[0].o;
+  const volume = bars.reduce((a,b)=>a+b.v,0);
+  let pv=0,vv=0; const vwapSeries = bars.map(b=>{const tp=(b.h+b.l+b.c)/3; pv+=tp*b.v; vv+=b.v; return vv?pv/vv:tp;});
+  const vwap = vwapSeries[vwapSeries.length-1];
+  const hi = Math.max(...bars.map(b=>b.h)), lo = Math.min(...bars.map(b=>b.l));
+  // rolling expected volume fraction -> rvol approximated by day volume vs avg prior full-day volume pro-rated by bars so far
+  const frac = bars.length/78;
+  const rvol = avgPriorVol ? volume/(avgPriorVol*Math.min(1,Math.max(frac,.05))) : null;
+  const closes = allBars.map(b=>b.c);
+  const rsi = calcRSI(closes,14);
+  const atr = bars.slice(-14).reduce((a,b)=>a+(b.h-b.l),0)/Math.min(14,bars.length);
+  const pct = (price-prev)/prev*100;
+  return {sym,bars,vwapSeries,price,prev,chg:price-prev,pct,volume,vwap,vwapDiff:(price-vwap)/vwap*100,hi,lo,
+          range:(hi-lo)/price*100,rvol,rsi,atr,open:bars[0].o};
+}
+
+function calcRSI(c,n){
+  if(c.length<=n) return null;
+  let g=0,l=0;
+  for(let i=1;i<=n;i++){const d=c[i]-c[i-1]; d>=0?g+=d:l-=d;} g/=n;l/=n;
+  for(let i=n+1;i<c.length;i++){const d=c[i]-c[i-1]; g=(g*(n-1)+Math.max(d,0))/n; l=(l*(n-1)+Math.max(-d,0))/n;}
+  return l===0?100:100-100/(1+g/l);
+}
+
+function signal(d){
+  let s=0;
+  if(d.vwapDiff>0.1)s++; else if(d.vwapDiff<-0.1)s--;
+  if(d.rsi!=null){ if(d.rsi>55&&d.rsi<75)s++; else if(d.rsi<45&&d.rsi>25)s--; }
+  if(d.pct>0.3)s++; else if(d.pct<-0.3)s--;
+  if(d.rsi>78||d.rsi<22) s=0; // extremos: posible agotamiento
+  return s>=2?"buy":s<=-2?"sell":"neutral";
+}
+
+/* ---------- Load ---------- */
+function loadAll(){ if(KEY&&!badKey) syncQuotes().then(render); else start(); }
+$("keybtn").onclick=()=>{ const k=prompt("Pega tu API key gratuita de Finnhub (finnhub.io → Dashboard):",KEY); if(k===null)return;
+  KEY=k.trim(); try{ localStorage.setItem("finnhub_key",KEY); }catch(e){} start(); };
+
+/* ---------- Render ---------- */
+function render(){
+  $("clock").textContent=new Date().toLocaleTimeString("es",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+  renderIndices(); renderRows(); renderMovers(); renderApple(); renderHero();
+}
+
+function renderIndices(){
+  $("indices").innerHTML=INDICES.map(([s,n])=>{const d=state.data[s]; if(!d)return"";
+    return `<div class="idx"><b>${n}</b><span>${fmt(d.price)}</span> <span class="${cls(d.pct)}">${d.pct>=0?"+":""}${fmt(d.pct)}%</span></div>`}).join("");
+}
+
+function renderRows(){
+  const list=WATCH.map(([s,n])=>({...state.data[s],name:n})).filter(d=>d.sym);
+  const {k,dir}=state.sort;
+  list.sort((a,b)=> k==="sym"?dir*a.sym.localeCompare(b.sym):dir*((a[k]??-1e18)-(b[k]??-1e18)));
+  $("rows").innerHTML=list.map(d=>{
+    const sg=signal(d), lab={buy:"COMPRA",sell:"VENTA",neutral:"NEUTRAL"}[sg];
+    return `<tr data-s="${d.sym}" class="${d.sym===state.selected?"sel":""}">
+      <td class="sym-name">${d.sym}<small>${d.name}</small></td>
+      <td>${fmt(d.price)}</td>
+      <td class="${cls(d.pct)}">${d.pct>=0?"+":""}${fmt(d.pct)}%</td>
+      <td style="color:${d.rvol>1.5?"var(--warn)":"inherit"}">${d.rvol?fmt(d.rvol,1)+"×":"—"}</td>
+      <td>${fmtVol(d.volume)}</td>
+      <td>${fmt(d.range)}%</td>
+      <td class="${cls(d.vwapDiff)}">${d.vwapDiff>=0?"+":""}${fmt(d.vwapDiff)}%</td>
+      <td style="color:${d.rsi>70?"var(--down)":d.rsi<30?"var(--up)":"inherit"}">${d.rsi?fmt(d.rsi,0):"—"}</td>
+      <td><span class="tag ${sg}">${lab}</span></td>
+      <td>${spark(d)}</td></tr>`}).join("");
+}
+
+function spark(d){
+  const v=d.bars.map(b=>b.c), mn=Math.min(...v), mx=Math.max(...v), w=80, h=26;
+  const pts=v.map((x,i)=>`${(i/(v.length-1||1)*w).toFixed(1)},${(h-(x-mn)/((mx-mn)||1)*h).toFixed(1)}`).join(" ");
+  return `<svg class="spark" viewBox="0 0 ${w} ${h}"><polyline fill="none" stroke="${d.pct>=0?"#22c55e":"#ef4444"}" stroke-width="1.5" points="${pts}"/></svg>`;
+}
+
+function renderMovers(){
+  const l=WATCH.map(w=>state.data[w[0]]).filter(Boolean).sort((a,b)=>b.pct-a.pct);
+  const row=d=>`<div class="mv"><b>${d.sym}</b><span class="${cls(d.pct)}">${d.pct>=0?"+":""}${fmt(d.pct)}%</span></div>`;
+  $("gainers").innerHTML=l.slice(0,4).map(row).join("");
+  $("losers").innerHTML=l.slice(-4).reverse().map(row).join("");
+}
+
+function renderApple(){
+  const d=state.data.AAPL; if(!d)return;
+  const sg=signal(d);
+  $("apple").innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:baseline">
+      <span style="font-size:28px;font-weight:600">${fmt(d.price)}</span>
+      <span class="${cls(d.pct)}" style="font-size:16px">${d.chg>=0?"+":""}${fmt(d.chg)} (${d.pct>=0?"+":""}${fmt(d.pct)}%)</span></div>
+    <div class="stats">
+      <div class="stat"><small>Apertura</small><b>${fmt(d.open)}</b></div>
+      <div class="stat"><small>Cierre previo</small><b>${fmt(d.prev)}</b></div>
+      <div class="stat"><small>Máx / Mín</small><b>${fmt(d.hi)} / ${fmt(d.lo)}</b></div>
+      <div class="stat"><small>VWAP</small><b>${fmt(d.vwap)}</b></div>
+      <div class="stat"><small>Volumen</small><b>${fmtVol(d.volume)}</b></div>
+      <div class="stat"><small>Señal</small><b><span class="tag ${sg}">${{buy:"COMPRA",sell:"VENTA",neutral:"NEUTRAL"}[sg]}</span></b></div>
+    </div>`;
+}
+
+function renderHero(){
+  const d=state.data[state.selected]; if(!d)return;
+  const n=(WATCH.find(w=>w[0]===d.sym)||[])[1]||d.sym;
+  $("hSym").innerHTML=`${d.sym} · ${n} · velas <span id="barlbl">${KEY?"1 min":"5 min"}</span>`;
+  $("hPx").textContent=fmt(d.price);
+  $("hChg").innerHTML=`<span class="${cls(d.pct)}">${d.chg>=0?"+":""}${fmt(d.chg)} (${d.pct>=0?"+":""}${fmt(d.pct)}%)</span>`;
+  const stop=d.price-d.atr*1.5, tgt=d.price+d.atr*3;
+  $("stats").innerHTML=[
+    ["Apertura",fmt(d.open)],["Máx día",fmt(d.hi)],["Mín día",fmt(d.lo)],["VWAP",fmt(d.vwap)],
+    ["Vol. relativo",d.rvol?fmt(d.rvol,1)+"×":"—"],["RSI(14)",d.rsi?fmt(d.rsi,0):"—"],
+    ["ATR (14 velas)",fmt(d.atr)],["Stop ref. (1.5 ATR)",fmt(stop)],["Objetivo ref. (3 ATR)",fmt(tgt)]
+  ].map(([a,b])=>`<div class="stat"><small>${a}</small><b>${b}</b></div>`).join("");
+  drawChart(d);
+}
+
+function drawChart(d){
+  const cv=$("chart"), dpr=window.devicePixelRatio||1, W=cv.clientWidth, H=cv.clientHeight;
+  cv.width=W*dpr; cv.height=H*dpr; const g=cv.getContext("2d"); g.scale(dpr,dpr);
+  g.clearRect(0,0,W,H);
+  const padL=8,padR=56,padT=8,padB=60, volH=34, cw=W-padL-padR, ch=H-padT-padB;
+  const bars=d.bars, lo=Math.min(...bars.map(b=>b.l),...d.vwapSeries), hi=Math.max(...bars.map(b=>b.h),...d.vwapSeries);
+  const y=p=>padT+(hi-p)/((hi-lo)||1)*ch, step=cw/bars.length, bw=Math.min(14,Math.max(1,step*.6));
+  g.font="11px sans-serif"; g.fillStyle="#8b95ab"; g.strokeStyle="#252d40"; g.lineWidth=1;
+  for(let i=0;i<=4;i++){const p=lo+(hi-lo)*i/4, yy=y(p); g.beginPath(); g.moveTo(padL,yy); g.lineTo(W-padR,yy); g.stroke(); g.fillText(fmt(p),W-padR+6,yy+4);}
+  const mv=Math.max(...bars.map(b=>b.v))||1;
+  bars.forEach((b,i)=>{
+    const x=padL+i*step+step/2, up=b.c>=b.o, col=up?"#22c55e":"#ef4444";
+    g.strokeStyle=col; g.fillStyle=col;
+    g.beginPath(); g.moveTo(x,y(b.h)); g.lineTo(x,y(b.l)); g.stroke();
+    const top=y(Math.max(b.o,b.c)), bh=Math.max(1,Math.abs(y(b.o)-y(b.c))); g.fillRect(x-bw/2,top,bw,bh);
+    g.globalAlpha=.35; const vh=b.v/mv*volH; g.fillRect(x-bw/2,H-padB+volH-vh+2,bw,vh); g.globalAlpha=1;
+  });
+  g.strokeStyle="#4f8cff"; g.lineWidth=1.6; g.beginPath();
+  d.vwapSeries.forEach((p,i)=>{const x=padL+i*step+step/2; i?g.lineTo(x,y(p)):g.moveTo(x,y(p));}); g.stroke();
+  // prev close line
+  if(d.prev>=lo&&d.prev<=hi){g.setLineDash([4,4]); g.strokeStyle="#8b95ab"; g.lineWidth=1; g.beginPath(); g.moveTo(padL,y(d.prev)); g.lineTo(W-padR,y(d.prev)); g.stroke(); g.setLineDash([]);}
+  g.fillStyle="#4f8cff"; g.fillText("VWAP",padL+4,padT+12);
+  g.fillStyle="#8b95ab"; g.fillText("--- cierre previo",padL+48,padT+12);
+  // time labels
+  const every=Math.ceil(bars.length/6);
+  bars.forEach((b,i)=>{ if(i%every===0) g.fillText(new Date(b.t).toLocaleTimeString("es",{hour:"2-digit",minute:"2-digit"}),padL+i*step,H-6); });
+  // last price tag
+  g.fillStyle=d.pct>=0?"#22c55e":"#ef4444"; g.fillRect(W-padR,y(d.price)-8,padR-2,16);
+  g.fillStyle="#0b0e14"; g.fillText(fmt(d.price),W-padR+4,y(d.price)+4);
+}
+
+/* ---------- Events ---------- */
+$("rows").addEventListener("click",e=>{const tr=e.target.closest("tr"); if(!tr)return; state.selected=tr.dataset.s; renderRows(); renderHero(); scrollTo({top:0,behavior:"smooth"});});
+document.querySelectorAll("th[data-k]").forEach(th=>th.addEventListener("click",()=>{
+  const k=th.dataset.k; state.sort=state.sort.k===k?{k,dir:-state.sort.dir}:{k,dir:-1}; renderRows();}));
+$("refresh").onclick=loadAll;
+addEventListener("resize",()=>state.data[state.selected]&&drawChart(state.data[state.selected]));
+start();
+</script>
+</body>
+</html>
