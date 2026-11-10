@@ -1,0 +1,16 @@
+{
+  "name": "LADELOS Control de Vitrina",
+  "short_name": "Vitrina",
+  "start_url": "/vitrina.html",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f6f0e2",
+  "theme_color": "#163e8e",
+  "icons": [
+    {
+      "src": "/ladelos-badge-8.png",
+      "sizes": "any",
+      "type": "image/png"
+    }
+  ]
+}
