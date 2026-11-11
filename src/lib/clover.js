@@ -1,3 +1,9 @@
+import bayamonFlavors from './clover-bayamon-flavors.json'
+
+const bayamonItems = new Map(bayamonFlavors.flavors.flatMap(flavor =>
+  [flavor.regularId, flavor.madeToOrderId].filter(Boolean).map(id => [id, flavor])
+))
+
 const CLOVER_TOKEN = import.meta.env.VITE_CLOVER_API_TOKEN
 const MERCHANT_ID = import.meta.env.VITE_CLOVER_MERCHANT_ID
 const BASE_URL = `https://api.clover.com/v3/merchants/${MERCHANT_ID}`
@@ -22,13 +28,14 @@ export async function getVentasDelDia(fecha) {
   return data.elements || []
 }
 
-export function procesarVentasClover(lineItems) {
+export function procesarVentasClover(lineItems, merchantId = MERCHANT_ID) {
   const products = {}
   let totalSold = 0
   for (const item of lineItems) {
     if (!item.item) continue
-    const name = item.item.name
-    const category = item.item.categories?.[0]?.category?.name || 'Sin categoría'
+    const flavor = merchantId === bayamonFlavors.merchantId ? bayamonItems.get(item.item.id) : undefined
+    const name = flavor?.name ?? item.item.name
+    const category = flavor?.category ?? (item.item.categories?.[0]?.category?.name || 'Sin categoría')
     const key = category + '|' + name
     products[key] = (products[key] || 0) + 1
     totalSold++

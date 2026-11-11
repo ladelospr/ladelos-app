@@ -2,6 +2,7 @@
 // Verificado en docs.clover.com/docs/webhooks: el webhook solo trae {objectId, type, ts};
 // hay que buscar la orden completa por REST (GET /v3/merchants/{mId}/orders/{orderId}?expand=lineItems.modifications)
 // desde un servidor, con la app de Clover instalada y el encabezado X-Clover-Auth validado.
+import bayamonFlavors from '../../../src/lib/clover-bayamon-flavors.json';
 import type { Command } from '../domain/engine';
 import type { Flavor, SaleOrigin, State } from '../domain/types';
 
@@ -47,6 +48,44 @@ export function matchFlavor(flavors: Flavor[], line: CloverLineItem): Flavor | u
   return flavors.find((f) => f.cloverNames.some((c) => normalize(c) === n));
 }
 
+export interface CloverOrderContext {
+  merchantId: string;
+  channel?: 'register' | 'uber_eats' | 'doordash';
+  // Activar por tienda solo después de validar la transición de caja.
+  registerUsesDirectButtons?: boolean;
+  // IDs de delivery validados contra órdenes reales de este comercio y canal.
+  deliveryFlavorIds?: ReadonlyMap<string, string>;
+}
+
+const bayamonItems = new Map<string, { name: string; madeToOrder: boolean }>(bayamonFlavors.flavors.flatMap((flavor) => [
+  [flavor.madeToOrderId, { name: flavor.name, madeToOrder: true }] as const,
+  ...(flavor.regularId ? [[flavor.regularId, { name: flavor.name, madeToOrder: false }] as const] : []),
+]));
+
+function findOrderFlavor(flavors: Flavor[], line: CloverLineItem, context?: CloverOrderContext) {
+  const id = line.item?.id;
+  const delivery = context?.channel === 'uber_eats' || context?.channel === 'doordash';
+  const deliveryFlavorId = delivery && id ? context.deliveryFlavorIds?.get(id) : undefined;
+  const mapped = id && context?.merchantId === bayamonFlavors.merchantId ? bayamonItems.get(id) : undefined;
+  // Los nombres de postres de Clover incluyen un prefijo que el catálogo de Vitrina no usa.
+  const name = mapped?.name.replace(/^Pastelillo /, '') ?? line.name;
+  const flavor = deliveryFlavorId
+    ? flavors.find((f) => f.id === deliveryFlavorId)
+    : matchFlavor(flavors, { ...line, name });
+  if (!flavor) return undefined;
+
+  const legacyOrigin = originFromModifiers(line.modifications?.elements);
+  let origin: SaleOrigin = legacyOrigin;
+  if (delivery || mapped?.madeToOrder || !flavor.vitrinaEligible) {
+    origin = 'AL_MOMENTO';
+  } else if (legacyOrigin === 'DESCONOCIDO' && !line.modifications?.elements?.some(
+    (m) => /vitrina|al momento/.test(normalize(m.name)),
+  ) && mapped && context?.channel === 'register' && context.registerUsesDirectButtons) {
+    origin = 'VITRINA';
+  }
+  return { flavor, origin };
+}
+
 export interface Interpretation {
   commands: Extract<Command, { type: 'saleLine' }>[];
   ignored: { lineId: string; name: string; reason: string }[];
@@ -59,14 +98,15 @@ export interface Interpretation {
  * - Líneas que ya no aparecen en la orden se marcan como eliminadas (devuelven a vitrina).
  * - Líneas reembolsadas no regresan a vitrina.
  */
-export function interpretOrder(state: State, order: CloverOrder, eventId: string): Interpretation {
+export function interpretOrder(state: State, order: CloverOrder, eventId: string, context?: CloverOrderContext): Interpretation {
   const out: Interpretation = { commands: [], ignored: [], warnings: [] };
-  const lines = order.lineItems?.elements ?? [];
+  const lines = order.lineItems?.elements;
+  if (!lines) return out;
   const seen = new Set<string>();
   for (const li of lines) {
     seen.add(li.id);
-    const f = matchFlavor(state.flavors, li);
-    if (!f) {
+    const match = findOrderFlavor(state.flavors, li, context);
+    if (!match) {
       out.ignored.push({ lineId: li.id, name: li.name, reason: 'No es un sabor del catálogo' });
       continue;
     }
@@ -77,9 +117,9 @@ export function interpretOrder(state: State, order: CloverOrder, eventId: string
       eventId: `${eventId}:${li.id}`,
       lineId: li.id,
       orderId: order.id,
-      flavorId: f.id,
+      flavorId: match.flavor.id,
       qty: 1,
-      origin: originFromModifiers(li.modifications?.elements),
+      origin: match.origin,
       status: li.refunded ? 'reembolsada' : 'activa',
       source: 'clover',
     });

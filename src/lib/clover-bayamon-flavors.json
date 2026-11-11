@@ -1,0 +1,284 @@
+{
+  "merchantId": "REKD5Z4C7KA71",
+  "flavors": [
+    {
+      "name": "BBQ Pork",
+      "category": "ESPECIALIDADES",
+      "regularId": "ENBZMQ3VG0G0G",
+      "madeToOrderId": "MZ01ESFYF2EVJ"
+    },
+    {
+      "name": "Bistec",
+      "category": "ESPECIALIDADES",
+      "regularId": "D6B0YVZX5EHK8",
+      "madeToOrderId": "B0RM7MJ3M4Y30"
+    },
+    {
+      "name": "Camarón",
+      "category": "PREMIUM",
+      "regularId": "VZ868K95A44RP",
+      "madeToOrderId": "C77V4XHZG9XJ8"
+    },
+    {
+      "name": "Camarón, Churrasco y Queso",
+      "category": "PREMIUM",
+      "regularId": "7TFW3PC1ZQW3M",
+      "madeToOrderId": "ZQM9NC0ZRKV8Y"
+    },
+    {
+      "name": "Carbonara Camarón",
+      "category": "PREMIUM",
+      "regularId": "ZWE0A2JFCY6CE",
+      "madeToOrderId": "RD88D0XXZ546Y"
+    },
+    {
+      "name": "Carbonara",
+      "category": "ESPECIALIDADES",
+      "regularId": "3F6CPAKKW8XVT",
+      "madeToOrderId": "9V7BRQ5BNZ0J6"
+    },
+    {
+      "name": "Carne Ahumada",
+      "category": "ESPECIALIDADES",
+      "regularId": "T3WM2QT6DQDYE",
+      "madeToOrderId": "XZGK9M7KPE1NT"
+    },
+    {
+      "name": "Carne Queso Americano",
+      "category": "CON QUESO",
+      "regularId": "VMG7ZQHB1H8NC",
+      "madeToOrderId": "Y1NEHSB0DCEGM"
+    },
+    {
+      "name": "Carne Queso Mozzarella",
+      "category": "CON QUESO",
+      "regularId": "S0ADAMAGZ7MJ0",
+      "madeToOrderId": "80RS8RKTJZNHG"
+    },
+    {
+      "name": "Carne",
+      "category": "CLÁSICOS",
+      "regularId": "KYYBC4YVN3M92",
+      "madeToOrderId": "QGKWE2HWSEVSP"
+    },
+    {
+      "name": "Cheeseburger",
+      "category": "ESPECIALIDADES",
+      "regularId": "3H2R37C2818TC",
+      "madeToOrderId": "Y8T3FYXNFGEC6"
+    },
+    {
+      "name": "Chicken Deluxe",
+      "category": "ESPECIALIDADES",
+      "regularId": "XBT98NTSSNG9M",
+      "madeToOrderId": "7360ZAE5FCWDM"
+    },
+    {
+      "name": "Churrasco Queso",
+      "category": "PREMIUM",
+      "regularId": "0Z949NARDZQTA",
+      "madeToOrderId": "PZ0BG230RA3NP"
+    },
+    {
+      "name": "Churrasco, Amarillos y Queso",
+      "category": "PREMIUM",
+      "regularId": "BB0RSCZ96NGK0",
+      "madeToOrderId": "EHF3D94F4BPBE"
+    },
+    {
+      "name": "Cuajito",
+      "category": "ESPECIALIDADES",
+      "regularId": "ABVK3FV3M6NV4",
+      "madeToOrderId": "H69E6KHVPC134"
+    },
+    {
+      "name": "Cubano",
+      "category": "ESPECIALIDADES",
+      "regularId": "8WB9S64VB8MH8",
+      "madeToOrderId": "EEE52AZ0TQBWW"
+    },
+    {
+      "name": "Jamón Queso",
+      "category": "CON QUESO",
+      "regularId": "QPRVXNHR4J5ZP",
+      "madeToOrderId": "GPJTKZ0ZK1V9R"
+    },
+    {
+      "name": "Lasaña",
+      "category": "GOURMET",
+      "regularId": "9M6NAG8DFCENM",
+      "madeToOrderId": "3Y2G9G3ZZPS3G"
+    },
+    {
+      "name": "Meat Lover",
+      "category": "ESPECIALIDADES",
+      "regularId": "XSQD4DY9ZHQHW",
+      "madeToOrderId": "2RHTXSB1YWC7G"
+    },
+    {
+      "name": "Mofongo Camarones",
+      "category": "PREMIUM",
+      "regularId": "VH887MFV7MAGT",
+      "madeToOrderId": "QAKFF4SVKSNFR"
+    },
+    {
+      "name": "Monte Cristo",
+      "category": "ESPECIALIDADES",
+      "regularId": "F5TGYVQYYFEVC",
+      "madeToOrderId": "29EGT26ZN5QB6"
+    },
+    {
+      "name": "Pastelón Carne",
+      "category": "GOURMET",
+      "regularId": "S0DC561902EE6",
+      "madeToOrderId": "XXN51NZ83KX3R"
+    },
+    {
+      "name": "Pastelón Pollo",
+      "category": "GOURMET",
+      "regularId": "MQJYP9TY2MAJW",
+      "madeToOrderId": "PZGAF8E45SMZT"
+    },
+    {
+      "name": "Pastrami",
+      "category": "ESPECIALIDADES",
+      "regularId": "SW8P26H0GYQEJ",
+      "madeToOrderId": "2X6T35NHJ64AE"
+    },
+    {
+      "name": "Pechuga Rellena",
+      "category": "ESPECIALIDADES",
+      "regularId": "8SHK7ANB40ZAW",
+      "madeToOrderId": "6JFKZCNN58SDP"
+    },
+    {
+      "name": "Philly Cheesesteak",
+      "category": "ESPECIALIDADES",
+      "regularId": "696SZ2HX8AHSP",
+      "madeToOrderId": "NW4JVT240HB68"
+    },
+    {
+      "name": "Pizza Chorizo",
+      "category": "GOURMET",
+      "regularId": "98T0XC4EXFPA6",
+      "madeToOrderId": "TSPNNVYJT2M2T"
+    },
+    {
+      "name": "Pizza Pepperoni",
+      "category": "GOURMET",
+      "regularId": "VWNXDJSH496BG",
+      "madeToOrderId": "1MRB1AZP5DQM0"
+    },
+    {
+      "name": "Pizza",
+      "category": "CLÁSICOS",
+      "regularId": "S8EFNXSS0JHRG",
+      "madeToOrderId": "YQRA2TSVGXB6Y"
+    },
+    {
+      "name": "Pollo Bacon Ranch",
+      "category": "ESPECIALIDADES",
+      "regularId": "893GV42ACGDY0",
+      "madeToOrderId": "N1318TS70P29E"
+    },
+    {
+      "name": "Pollo Picante",
+      "category": "GOURMET",
+      "regularId": "S8ZH8V3NZR6A6",
+      "madeToOrderId": "F8T65YKTD3M9R"
+    },
+    {
+      "name": "Pollo Queso Americano",
+      "category": "CON QUESO",
+      "regularId": "7V2GPZMF3QEJC",
+      "madeToOrderId": "RBM2X9689HPW4"
+    },
+    {
+      "name": "Pollo Queso Mozzarella",
+      "category": "CON QUESO",
+      "regularId": "2795KSTMDVM8M",
+      "madeToOrderId": "BMN6APB312D1J"
+    },
+    {
+      "name": "Pollo",
+      "category": "CLÁSICOS",
+      "regularId": "39DZ9QC7Z3TYR",
+      "madeToOrderId": "9GDZ0V0HHFWP0"
+    },
+    {
+      "name": "Pulpo",
+      "category": "PREMIUM",
+      "regularId": "80D79PC218QY8",
+      "madeToOrderId": "AQXX4G805WS4J"
+    },
+    {
+      "name": "Revoltillo Deluxe",
+      "category": "GOURMET",
+      "regularId": "XP6WSRARQFAST",
+      "madeToOrderId": "C0V4HE8FNA6K4"
+    },
+    {
+      "name": "Revoltillo",
+      "category": "CON QUESO",
+      "regularId": "K1H8PTWHR4BXP",
+      "madeToOrderId": "43ACY12QQBTP2"
+    },
+    {
+      "name": "Spicy Crab",
+      "category": "PREMIUM",
+      "regularId": "HMPNV2WJ3Z8EY",
+      "madeToOrderId": "2HZQAWN7ACTP0"
+    },
+    {
+      "name": "Tripleta",
+      "category": "GOURMET",
+      "regularId": "Q0QYR2MV3MFVA",
+      "madeToOrderId": "GKJQ8B1KFYED2"
+    },
+    {
+      "name": "Apple Pie",
+      "category": "POSTRES",
+      "madeToOrderId": "1767A4E6ZDY5J"
+    },
+    {
+      "name": "Pastelillo Guayaba Queso",
+      "category": "POSTRES",
+      "madeToOrderId": "YVV75W080D3J4"
+    },
+    {
+      "name": "Pastelillo Nutella",
+      "category": "POSTRES",
+      "madeToOrderId": "MGFKE1FM8P920"
+    },
+    {
+      "name": "Queso",
+      "category": "CLÁSICOS",
+      "madeToOrderId": "JE4ZC2SKYW63T"
+    },
+    {
+      "name": "Pollo Brócoli",
+      "category": "GOURMET",
+      "madeToOrderId": "JH2EPWQA8WVW0"
+    },
+    {
+      "name": "Brócoli & Cebolla",
+      "category": "VEGGIE",
+      "madeToOrderId": "BXAGN8WTDQDTC"
+    },
+    {
+      "name": "Brócoli & Queso",
+      "category": "VEGGIE",
+      "madeToOrderId": "3A5MM3AWAV15R"
+    },
+    {
+      "name": "Brócoli, Cebolla & Queso",
+      "category": "VEGGIE",
+      "madeToOrderId": "6BKBQJ5DVAWR6"
+    },
+    {
+      "name": "Queso & Cebolla",
+      "category": "VEGGIE",
+      "madeToOrderId": "DDJWC9P5N2XYW"
+    }
+  ]
+}
