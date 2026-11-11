@@ -238,47 +238,56 @@
     {
       "name": "Apple Pie",
       "category": "POSTRES",
-      "madeToOrderId": "1767A4E6ZDY5J"
+      "madeToOrderId": "1767A4E6ZDY5J",
+      "regularId": "6JH6NEFJ01MF8"
     },
     {
       "name": "Pastelillo Guayaba Queso",
       "category": "POSTRES",
-      "madeToOrderId": "YVV75W080D3J4"
+      "madeToOrderId": "YVV75W080D3J4",
+      "regularId": "JRRBM1FN4W770"
     },
     {
       "name": "Pastelillo Nutella",
       "category": "POSTRES",
-      "madeToOrderId": "MGFKE1FM8P920"
+      "madeToOrderId": "MGFKE1FM8P920",
+      "regularId": "GYGAHA65SPW3M"
     },
     {
       "name": "Queso",
       "category": "CLÁSICOS",
-      "madeToOrderId": "JE4ZC2SKYW63T"
+      "madeToOrderId": "JE4ZC2SKYW63T",
+      "regularId": "GD7049RE4TNC2"
     },
     {
       "name": "Pollo Brócoli",
       "category": "GOURMET",
-      "madeToOrderId": "JH2EPWQA8WVW0"
+      "madeToOrderId": "JH2EPWQA8WVW0",
+      "regularId": "A69TTS5GFP8DW"
     },
     {
       "name": "Brócoli & Cebolla",
       "category": "VEGGIE",
-      "madeToOrderId": "BXAGN8WTDQDTC"
+      "madeToOrderId": "BXAGN8WTDQDTC",
+      "regularId": "S4XTTQ29SA0BE"
     },
     {
       "name": "Brócoli & Queso",
       "category": "VEGGIE",
-      "madeToOrderId": "3A5MM3AWAV15R"
+      "madeToOrderId": "3A5MM3AWAV15R",
+      "regularId": "1QNYEHB3B81XC"
     },
     {
       "name": "Brócoli, Cebolla & Queso",
       "category": "VEGGIE",
-      "madeToOrderId": "6BKBQJ5DVAWR6"
+      "madeToOrderId": "6BKBQJ5DVAWR6",
+      "regularId": "61NRQWVXRDTY0"
     },
     {
       "name": "Queso & Cebolla",
       "category": "VEGGIE",
-      "madeToOrderId": "DDJWC9P5N2XYW"
+      "madeToOrderId": "DDJWC9P5N2XYW",
+      "regularId": "62ZJH466RNS8T"
     }
   ]
 }
