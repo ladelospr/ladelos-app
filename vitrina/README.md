@@ -98,3 +98,11 @@ Propuesta: usar **Supabase**, el mismo proyecto que ya usa ladelos-app.
 - El motor (`src/domain`) se reutiliza tal cual del lado del servidor.
 
 Costo: el plan gratis de Supabase probablemente alcanza para una tienda, aunque pausa los proyectos inactivos. El plan Pro cuesta unos US$25 al mes por organización, y quizás ya lo pagas por ladelos-app. Para la Fase 3, el servidor del webhook de Clover puede ser una Edge Function de Supabase. **No se ha contratado nada.**
+
+## Fase 3: webhook de Clover (Edge Function `clover-webhook`)
+
+Archivo para pegar en Supabase: `dist/edge/clover-webhook.ts` (se genera con `node build.mjs`).
+1. Supabase → Edge Functions → crear `clover-webhook`, pegar el archivo y **desactivar Verify JWT** (Clover no manda el JWT; la seguridad es el código en `X-Clover-Auth`).
+2. Secrets: `CLOVER_WEBHOOK_CODE`, `CLOVER_API_TOKEN` (solo lectura de órdenes), `CLOVER_MERCHANTS` = `{"REKD5Z4C7KA71":"bayamon"}`. Opcional: `CLOVER_API_BASE`, `CLOVER_DIRECT_BUTTONS=false` para apagar los botones directos.
+3. Clover (Developer Dashboard): app con permiso de leer órdenes, webhook a `https://<proyecto>.supabase.co/functions/v1/clover-webhook`; el código de verificación aparece en los logs de la función.
+4. Probar primero con una orden de prueba y revisar Administración → historial. Los eventos son idempotentes: si Clover reintenta no se descuenta dos veces.

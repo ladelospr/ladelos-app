@@ -3,6 +3,7 @@
 //  dist/standalone.html               Fase 1 como documento completo.
 //  dist/vitrina.html                  Fase 2 conectada a Supabase (va en ladelos-app/public/).
 //  dist/edge/vitrina.ts               Edge Function de Supabase en un solo archivo.
+//  dist/edge/clover-webhook.ts        Edge Function que recibe las órdenes de Clover.
 import { build } from 'esbuild';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
@@ -77,4 +78,15 @@ const edge = await build({
   legalComments: 'none',
 });
 writeFileSync('dist/edge/vitrina.ts', `// LADELOS Control de Vitrina — Edge Function "vitrina" (generada por build.mjs; no editar a mano)\n${edge.outputFiles[0].text}`);
+const hook = await build({
+  entryPoints: ['supabase/functions/clover-webhook/index.ts'],
+  bundle: true,
+  format: 'esm',
+  platform: 'neutral',
+  target: 'es2022',
+  write: false,
+  external: ['npm:*'],
+  legalComments: 'none',
+});
+writeFileSync('dist/edge/clover-webhook.ts', `// LADELOS Control de Vitrina — Edge Function "clover-webhook" (generada por build.mjs; no editar a mano)\n${hook.outputFiles[0].text}`);
 console.log(`OK · local ${(local.length / 1024).toFixed(0)} KB · conectada ${(remote.length / 1024).toFixed(0)} KB · edge ${(edge.outputFiles[0].text.length / 1024).toFixed(0)} KB`);

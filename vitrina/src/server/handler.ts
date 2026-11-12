@@ -31,7 +31,7 @@ export interface Db {
   casStore(storeId: string, expectedVersion: number, state: State): Promise<boolean>; // false si la versión cambió
   setTestOffset(storeId: string, ms: number): Promise<void>;
   appendHistory(storeId: string, version: number, entry: {
-    user_id: string;
+    user_id: string | null;
     command: unknown;
     ok: boolean;
     result: unknown;
@@ -51,11 +51,11 @@ export interface Reply {
   status: number;
   body: Record<string, unknown>;
 }
-const reply = (status: number, body: Record<string, unknown>): Reply => ({ status, body });
+export const reply = (status: number, body: Record<string, unknown>): Reply => ({ status, body });
 
 const ROLES: MemberRole[] = ['vitrina', 'freidora', 'ambos', 'admin'];
 
-function withMembers(s: State, members: Member[]): State {
+export function withMembers(s: State, members: Member[]): State {
   return {
     ...s,
     users: members.map((m) => ({ id: m.user_id, name: m.display_name, role: m.role, pin: '', active: true })),
@@ -74,7 +74,7 @@ function sameState(a: State, b: State) {
   return JSON.stringify({ ...a, lastEvaluatedAt: 0 }) === JSON.stringify({ ...b, lastEvaluatedAt: 0 });
 }
 
-async function loadOrCreate(db: Db, storeId: string): Promise<StoreRow> {
+export async function loadOrCreate(db: Db, storeId: string): Promise<StoreRow> {
   let row = await db.loadStore(storeId);
   if (!row) {
     await db.insertStore(storeId, freshStore(storeId));
